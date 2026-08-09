@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teacher Profile</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+    }
+
+    body {
+      background-color: #d1d5db;
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .resume-container {
+      width: 100%;
+      max-width: 700px;
+      background: #ffffff;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      position: relative;
+    }
+
+    /* Top Banner Section */
+    .top-banner {
+      background-color: #426944;
+      color: #ffffff;
+      padding: 35px 30px 30px 220px;
+      min-height: 125px;
+    }
+
+    .top-banner h1 {
+      font-size: 34px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      line-height: 1.1;
+    }
+
+    .top-banner p {
+      font-size: 18px;
+      letter-spacing: 2.5px;
+      margin-top: 6px;
+      font-weight: 300;
+      text-transform: uppercase;
+    }
+
+    /* Floating Image */
+    .photo-frame {
+      position: absolute;
+      top: 12px;
+      left: 20px;
+      width: 165px;
+      height: 195px;
+      background: #ffffff;
+      padding: 4px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      z-index: 5;
+    }
+
+    .photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Main Body Layout */
+    .body-wrapper {
+      display: table;
+      width: 100%;
+      margin-top: 45px;
+    }
+
+    .left-sidebar {
+      display: table-cell;
+      width: 32%;
+      vertical-align: top;
+      padding: 20px 15px 20px 25px;
+      border-right: 32px solid #426944; /* Green Sidebar Accent */
+    }
+
+    .right-content {
+      display: table-cell;
+      width: 68%;
+      vertical-align: top;
+      padding: 20px 30px 20px 25px;
+    }
+
+    /* Titles */
+    h2.heading {
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      color: #000000;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    /* Skills Styling */
+    .skills-list {
+      list-style-type: disc;
+      padding-left: 16px;
+      font-size: 12.5px;
+      color: #222222;
+      line-height: 1.55;
+      font-weight: 600;
+    }
+
+    .skills-list li {
+      margin-bottom: 4px;
+    }
+
+    /* Right Block Items */
+    .block {
+      margin-bottom: 28px;
+    }
+
+    .summary-text {
+      font-size: 12.5px;
+      color: #222222;
+      line-height: 1.5;
+      text-align: justify;
+    }
+
+    /* Formatted Text (Education / Work Experience) */
+    .entry-item {
+      margin-bottom: 14px;
+      font-size: 12.5px;
+      color: #222222;
+      line-height: 1.4;
+    }
+
+    .entry-item strong {
+      display: block;
+      font-weight: bold;
+      font-style: italic;
+      color: #000000;
+      font-size: 13px;
+    }
+
+    /* Footer Layout */
+    .footer-line {
+      border-top: 1px solid #c0c0c0;
+      margin: 10px 25px 0 25px;
+    }
+
+    .footer-wrapper {
+      display: table;
+      width: 100%;
+      padding: 20px 25px 30px 25px;
+    }
+
+    .footer-col {
+      display: table-cell;
+      width: 50%;
+      vertical-align: top;
+      font-size: 12.5px;
+      line-height: 1.6;
+      color: #222222;
+    }
+
+    #loader {
+      text-align: center;
+      padding: 60px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<div id="loader">Loading Profile Data...</div>
+
+<div class="resume-container" id="resumeApp" style="display: none;">
+  
+  <!-- Photo -->
+  <div class="photo-frame">
+    <img id="teacherImg" src="" alt="Teacher Profile">
+  </div>
+
+  <!-- Header -->
+  <div class="top-banner">
+    <h1 id="teacherName">--</h1>
+    <p id="teacherDesignation">TEACHER</p>
+  </div>
+
+  <!-- Main Body -->
+  <div class="body-wrapper">
+    <!-- Left Column (Skills + Green Block Border) -->
+    <div class="left-sidebar">
+      <h2 class="heading">SKILLS</h2>
+      <ul class="skills-list" id="skillsList"></ul>
+    </div>
+
+    <!-- Right Column -->
+    <div class="right-content">
+      <div class="block">
+        <h2 class="heading">PROFILE SUMMARY</h2>
+        <p class="summary-text" id="summaryBox"></p>
+      </div>
+
+      <div class="block">
+        <h2 class="heading">EDUCATION</h2>
+        <div id="educationBox"></div>
+      </div>
+
+      <div class="block">
+        <h2 class="heading">WORK EXPERIENCE</h2>
+        <div id="experienceBox"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-line"></div>
+
+  <!-- Footer -->
+  <div class="footer-wrapper">
+    <div class="footer-col">
+      <h2 class="heading">CONTACT ME</h2>
+      <div id="contactBox"></div>
+    </div>
+
+    <div class="footer-col">
+      <h2 class="heading">REFERENCES</h2>
+      <div id="referenceBox"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxmbWmOab_WNL8JXi0SO-bFcbaWrzkeP3uGNYZlwxqhlSCTG5_mg0IIKj_yj3_Xjple0Q/exec";
+
+  window.addEventListener("DOMContentLoaded", () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const teacherId = urlParams.get('id');
+
+    let fetchUrl = SCRIPT_URL;
+    if (teacherId) fetchUrl += "?id=" + encodeURIComponent(teacherId);
+
+    fetch(fetchUrl)
+      .then(res => res.json())
+      .then(res => {
+        if (res.status === "success" && res.data) {
+          renderData(res.data);
+          document.getElementById("loader").style.display = "none";
+          document.getElementById("resumeApp").style.display = "block";
+        } else {
+          document.getElementById("loader").innerText = "Profile not found!";
+        }
+      })
+      .catch(err => {
+        document.getElementById("loader").innerText = "Error fetching data!";
+        console.error(err);
+      });
+  });
+
+  function renderData(data) {
+    document.getElementById("teacherName").innerText = data["Teacher Name"] || "";
+    document.getElementById("teacherDesignation").innerText = data["Designation"] || "TEACHER";
+    document.getElementById("teacherImg").src = data["Photo_url"] || "https://via.placeholder.com/150";
+    document.getElementById("summaryBox").innerText = data["Profile Summary"] || "";
+
+    // 1. Render Skills (Comma or Newline dynamic split)
+    const skillsList = document.getElementById("skillsList");
+    skillsList.innerHTML = "";
+    if (data["Skills"]) {
+      const skillsArr = String(data["Skills"]).split(/,|\n/);
+      skillsArr.forEach(s => {
+        if (s.trim()) {
+          const li = document.createElement("li");
+          li.innerText = s.trim();
+          skillsList.appendChild(li);
+        }
+      });
+    }
+
+    // 2. Dynamic Text Formatting for Education & Experience
+    renderFormattedBlock(data["Education"], "educationBox");
+    renderFormattedBlock(data["Work Experience"], "experienceBox");
+
+    // 3. Contact Me Formatting
+    const contactBox = document.getElementById("contactBox");
+    contactBox.innerHTML = "";
+    if (data["Contact Me"]) {
+      const lines = String(data["Contact Me"]).split("\n");
+      lines.forEach(l => {
+        if(l.trim()) {
+          const p = document.createElement("p");
+          p.innerText = l.trim();
+          contactBox.appendChild(p);
+        }
+      });
+    }
+
+    // 4. Reference Formatting
+    const refBox = document.getElementById("referenceBox");
+    refBox.innerHTML = "";
+    if (data["Reference"]) {
+      const lines = String(data["Reference"]).split("\n");
+      lines.forEach((l, idx) => {
+        if(l.trim()) {
+          const p = document.createElement("p");
+          p.innerText = l.trim();
+          if (idx === 0) p.style.fontWeight = "bold"; // Reference Name Bold
+          refBox.appendChild(p);
+        }
+      });
+    }
+  }
+
+  // Dynamic Parsing: Pahli line ko Bold/Italic Heading banayega aur baaki ko subtext
+  function renderFormattedBlock(rawText, targetId) {
+    const container = document.getElementById(targetId);
+    container.innerHTML = "";
+    if (!rawText) return;
+
+    const blocks = String(rawText).split("\n\n");
+    blocks.forEach(block => {
+      const lines = block.split("\n").filter(l => l.trim() !== "");
+      if (lines.length > 0) {
+        const div = document.createElement("div");
+        div.className = "entry-item";
+        
+        let html = `<strong>${lines[0].trim()}</strong>`;
+        for (let i = 1; i < lines.length; i++) {
+          html += `<div>${lines[i].trim()}</div>`;
+        }
+        div.innerHTML = html;
+        container.appendChild(div);
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
