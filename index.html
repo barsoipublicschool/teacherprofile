@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Teacher Profile</title>
+  <title>School Teachers Directory</title>
   <style>
     * {
       box-sizing: border-box;
@@ -13,53 +13,164 @@
     }
 
     body {
-      background-color: #d1d5db;
+      background-color: #e5e7eb;
+      padding: 15px;
       display: flex;
       justify-content: center;
-      padding: 20px;
+      align-items: flex-start;
+      min-height: 100vh;
     }
 
-    .resume-container {
+    #app-container {
       width: 100%;
-      max-width: 700px;
-      background: #ffffff;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-      position: relative;
+      max-width: 800px;
     }
 
-    /* Top Banner Section */
+    /* Loader */
+    .loader {
+      text-align: center;
+      padding: 50px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #374151;
+    }
+
+    /* ================= LIST VIEW STYLES ================= */
+    .directory-header {
+      background-color: #426944;
+      color: white;
+      padding: 20px;
+      border-radius: 8px 8px 0 0;
+      text-align: center;
+    }
+
+    .directory-header h1 {
+      font-size: 24px;
+      margin-bottom: 5px;
+    }
+
+    .teacher-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+      padding: 20px;
+      background: #ffffff;
+      border-radius: 0 0 8px 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .teacher-card {
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+      background: #fafafa;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .teacher-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+    }
+
+    .teacher-card img {
+      width: 110px;
+      height: 130px;
+      object-fit: cover;
+      border-radius: 4px;
+      border: 2px solid #426944;
+      margin-bottom: 10px;
+      background-color: #ddd;
+    }
+
+    .teacher-card h3 {
+      font-size: 16px;
+      color: #111827;
+      margin-bottom: 4px;
+    }
+
+    .teacher-card p {
+      font-size: 13px;
+      color: #4b5563;
+      margin-bottom: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .btn-view {
+      background-color: #426944;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: bold;
+      width: 100%;
+    }
+
+    .btn-view:hover {
+      background-color: #325034;
+    }
+
+    /* ================= PROFILE VIEW STYLES ================= */
+    .nav-bar {
+      margin-bottom: 15px;
+    }
+
+    .btn-back {
+      background-color: #374151;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .resume-card {
+      background: #ffffff;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Header Banner */
     .top-banner {
       background-color: #426944;
       color: #ffffff;
-      padding: 35px 30px 30px 220px;
-      min-height: 125px;
+      padding: 25px 20px 20px 190px;
+      min-height: 120px;
     }
 
     .top-banner h1 {
-      font-size: 34px;
+      font-size: 28px;
       font-weight: 700;
-      letter-spacing: 0.5px;
       line-height: 1.1;
     }
 
     .top-banner p {
-      font-size: 18px;
-      letter-spacing: 2.5px;
-      margin-top: 6px;
-      font-weight: 300;
+      font-size: 16px;
+      letter-spacing: 2px;
+      margin-top: 5px;
       text-transform: uppercase;
+      font-weight: 300;
     }
 
     /* Floating Image */
     .photo-frame {
       position: absolute;
-      top: 12px;
+      top: 15px;
       left: 20px;
-      width: 165px;
-      height: 195px;
+      width: 145px;
+      height: 175px;
       background: #ffffff;
       padding: 4px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
       z-index: 5;
     }
 
@@ -67,71 +178,60 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      background-color: #eee;
     }
 
-    /* Main Body Layout */
-    .body-wrapper {
-      display: table;
-      width: 100%;
-      margin-top: 45px;
+    /* Main Body Flexbox (Responsive) */
+    .profile-body {
+      display: flex;
+      margin-top: 40px;
+      flex-wrap: wrap;
     }
 
-    .left-sidebar {
-      display: table-cell;
+    .left-col {
       width: 32%;
-      vertical-align: top;
-      padding: 20px 15px 20px 25px;
-      border-right: 32px solid #426944; /* Green Sidebar Accent */
+      padding: 20px 15px 20px 20px;
+      border-right: 25px solid #426944;
     }
 
-    .right-content {
-      display: table-cell;
+    .right-col {
       width: 68%;
-      vertical-align: top;
-      padding: 20px 30px 20px 25px;
+      padding: 20px 25px;
     }
 
-    /* Titles */
     h2.heading {
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 800;
-      letter-spacing: 1.2px;
+      letter-spacing: 1px;
       color: #000000;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       text-transform: uppercase;
     }
 
-    /* Skills Styling */
     .skills-list {
       list-style-type: disc;
-      padding-left: 16px;
-      font-size: 12.5px;
-      color: #222222;
-      line-height: 1.55;
+      padding-left: 15px;
+      font-size: 12px;
+      color: #222;
+      line-height: 1.6;
       font-weight: 600;
     }
 
-    .skills-list li {
-      margin-bottom: 4px;
-    }
-
-    /* Right Block Items */
     .block {
-      margin-bottom: 28px;
+      margin-bottom: 22px;
     }
 
     .summary-text {
-      font-size: 12.5px;
-      color: #222222;
+      font-size: 12px;
+      color: #333;
       line-height: 1.5;
       text-align: justify;
     }
 
-    /* Formatted Text (Education / Work Experience) */
     .entry-item {
-      margin-bottom: 14px;
-      font-size: 12.5px;
-      color: #222222;
+      margin-bottom: 12px;
+      font-size: 12px;
+      color: #333;
       line-height: 1.4;
     }
 
@@ -139,138 +239,204 @@
       display: block;
       font-weight: bold;
       font-style: italic;
-      color: #000000;
-      font-size: 13px;
+      color: #000;
+      font-size: 12.5px;
     }
 
-    /* Footer Layout */
     .footer-line {
-      border-top: 1px solid #c0c0c0;
-      margin: 10px 25px 0 25px;
+      border-top: 1px solid #ccc;
+      margin: 10px 20px 0 20px;
     }
 
     .footer-wrapper {
-      display: table;
-      width: 100%;
-      padding: 20px 25px 30px 25px;
+      display: flex;
+      padding: 15px 20px 25px 20px;
+      flex-wrap: wrap;
     }
 
     .footer-col {
-      display: table-cell;
       width: 50%;
-      vertical-align: top;
-      font-size: 12.5px;
+      font-size: 12px;
       line-height: 1.6;
-      color: #222222;
+      color: #333;
     }
 
-    #loader {
-      text-align: center;
-      padding: 60px;
-      font-size: 20px;
-      font-weight: bold;
+    /* ================= MOBILE RESPONSIVE FIX ================= */
+    @media (max-width: 650px) {
+      .top-banner {
+        padding: 15px 15px 15px 15px;
+        text-align: center;
+      }
+
+      .photo-frame {
+        position: relative;
+        top: 0;
+        left: 0;
+        margin: 15px auto 0 auto;
+        width: 140px;
+        height: 165px;
+      }
+
+      .profile-body {
+        margin-top: 15px;
+        flex-direction: column;
+      }
+
+      .left-col {
+        width: 100%;
+        border-right: none;
+        border-bottom: 8px solid #426944;
+        padding: 15px 20px;
+      }
+
+      .right-col {
+        width: 100%;
+        padding: 20px;
+      }
+
+      .footer-col {
+        width: 100%;
+        margin-bottom: 15px;
+      }
     }
   </style>
 </head>
 <body>
 
-<div id="loader">Loading Profile Data...</div>
-
-<div class="resume-container" id="resumeApp" style="display: none;">
+<div id="app-container">
   
-  <!-- Photo -->
-  <div class="photo-frame">
-    <img id="teacherImg" src="" alt="Teacher Profile">
+  <div id="loader" class="loader">Loading Teachers Directory...</div>
+
+  <!-- VIEW 1: TEACHER LIST DIRECTORY -->
+  <div id="directoryView" style="display: none;">
+    <div class="directory-header">
+      <h1>School Faculty Directory</h1>
+      <p>Select a teacher to view full profile</p>
+    </div>
+    <div class="teacher-grid" id="teacherGrid"></div>
   </div>
 
-  <!-- Header -->
-  <div class="top-banner">
-    <h1 id="teacherName">--</h1>
-    <p id="teacherDesignation">TEACHER</p>
-  </div>
-
-  <!-- Main Body -->
-  <div class="body-wrapper">
-    <!-- Left Column (Skills + Green Block Border) -->
-    <div class="left-sidebar">
-      <h2 class="heading">SKILLS</h2>
-      <ul class="skills-list" id="skillsList"></ul>
+  <!-- VIEW 2: INDIVIDUAL PROFILE CARD -->
+  <div id="profileView" style="display: none;">
+    <div class="nav-bar">
+      <button class="btn-back" onclick="showDirectory()">← Back to Teachers List</button>
     </div>
 
-    <!-- Right Column -->
-    <div class="right-content">
-      <div class="block">
-        <h2 class="heading">PROFILE SUMMARY</h2>
-        <p class="summary-text" id="summaryBox"></p>
+    <div class="resume-card">
+      <div class="photo-frame">
+        <img id="pImg" src="" alt="Photo" onerror="this.src='https://via.placeholder.com/150'">
       </div>
 
-      <div class="block">
-        <h2 class="heading">EDUCATION</h2>
-        <div id="educationBox"></div>
+      <div class="top-banner">
+        <h1 id="pName">--</h1>
+        <p id="pDesignation">TEACHER</p>
       </div>
 
-      <div class="block">
-        <h2 class="heading">WORK EXPERIENCE</h2>
-        <div id="experienceBox"></div>
+      <div class="profile-body">
+        <div class="left-col">
+          <h2 class="heading">SKILLS</h2>
+          <ul class="skills-list" id="pSkills"></ul>
+        </div>
+
+        <div class="right-col">
+          <div class="block">
+            <h2 class="heading">PROFILE SUMMARY</h2>
+            <p class="summary-text" id="pSummary"></p>
+          </div>
+
+          <div class="block">
+            <h2 class="heading">EDUCATION</h2>
+            <div id="pEducation"></div>
+          </div>
+
+          <div class="block">
+            <h2 class="heading">WORK EXPERIENCE</h2>
+            <div id="pExperience"></div>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
 
-  <div class="footer-line"></div>
+      <div class="footer-line"></div>
 
-  <!-- Footer -->
-  <div class="footer-wrapper">
-    <div class="footer-col">
-      <h2 class="heading">CONTACT ME</h2>
-      <div id="contactBox"></div>
-    </div>
+      <div class="footer-wrapper">
+        <div class="footer-col">
+          <h2 class="heading">CONTACT ME</h2>
+          <div id="pContact"></div>
+        </div>
 
-    <div class="footer-col">
-      <h2 class="heading">REFERENCES</h2>
-      <div id="referenceBox"></div>
+        <div class="footer-col">
+          <h2 class="heading">REFERENCES</h2>
+          <div id="pReference"></div>
+        </div>
+      </div>
     </div>
   </div>
 
 </div>
 
 <script>
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxmbWmOab_WNL8JXi0SO-bFcbaWrzkeP3uGNYZlwxqhlSCTG5_mg0IIKj_yj3_Xjple0Q/exec";
+  // Apka Google Apps Script Web App URL yahan paste karein
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzflcrRUvs30bfLJB89RRZ6f9Qw1-SckLDtouASVjmFBspz3oYtDqSsIS2LXgeoITsvYQ/exec";
+  
+  let allTeachersData = [];
 
   window.addEventListener("DOMContentLoaded", () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const teacherId = urlParams.get('id');
-
-    let fetchUrl = SCRIPT_URL;
-    if (teacherId) fetchUrl += "?id=" + encodeURIComponent(teacherId);
-
-    fetch(fetchUrl)
+    fetch(SCRIPT_URL)
       .then(res => res.json())
       .then(res => {
-        if (res.status === "success" && res.data) {
-          renderData(res.data);
-          document.getElementById("loader").style.display = "none";
-          document.getElementById("resumeApp").style.display = "block";
+        document.getElementById("loader").style.display = "none";
+        if (res.status === "success" && res.data.length > 0) {
+          allTeachersData = res.data;
+          renderDirectory(allTeachersData);
+          document.getElementById("directoryView").style.display = "block";
         } else {
-          document.getElementById("loader").innerText = "Profile not found!";
+          document.getElementById("loader").innerText = "No Teacher Data Found!";
         }
       })
       .catch(err => {
-        document.getElementById("loader").innerText = "Error fetching data!";
         console.error(err);
+        document.getElementById("loader").innerText = "Error loading data!";
       });
   });
 
-  function renderData(data) {
-    document.getElementById("teacherName").innerText = data["Teacher Name"] || "";
-    document.getElementById("teacherDesignation").innerText = data["Designation"] || "TEACHER";
-    document.getElementById("teacherImg").src = data["Photo_url"] || "https://via.placeholder.com/150";
-    document.getElementById("summaryBox").innerText = data["Profile Summary"] || "";
+  // Render Directory Cards List
+  function renderDirectory(teachers) {
+    const grid = document.getElementById("teacherGrid");
+    grid.innerHTML = "";
 
-    // 1. Render Skills (Comma or Newline dynamic split)
-    const skillsList = document.getElementById("skillsList");
+    teachers.forEach((t) => {
+      const card = document.createElement("div");
+      card.className = "teacher-card";
+      
+      const photo = t["Photo_url"] || "https://via.placeholder.com/150";
+      const name = t["Teacher Name"] || "Unknown";
+      const des = t["Designation"] || "TEACHER";
+
+      card.innerHTML = `
+        <img src="${photo}" alt="${name}" onerror="this.src='https://via.placeholder.com/150'">
+        <h3>${name}</h3>
+        <p>${des}</p>
+        <button class="btn-view" onclick="openProfile(${t.id})">View Profile</button>
+      `;
+      grid.appendChild(card);
+    });
+  }
+
+  // Open Selected Profile
+  function openProfile(id) {
+    const teacher = allTeachersData.find(t => t.id === id);
+    if (!teacher) return;
+
+    document.getElementById("pName").innerText = teacher["Teacher Name"] || "";
+    document.getElementById("pDesignation").innerText = teacher["Designation"] || "TEACHER";
+    document.getElementById("pImg").src = teacher["Photo_url"] || "https://via.placeholder.com/150";
+    document.getElementById("pSummary").innerText = teacher["Profile Summary"] || "";
+
+    // Skills
+    const skillsList = document.getElementById("pSkills");
     skillsList.innerHTML = "";
-    if (data["Skills"]) {
-      const skillsArr = String(data["Skills"]).split(/,|\n/);
+    if (teacher["Skills"]) {
+      const skillsArr = String(teacher["Skills"]).split(/,|\n/);
       skillsArr.forEach(s => {
         if (s.trim()) {
           const li = document.createElement("li");
@@ -280,17 +446,16 @@
       });
     }
 
-    // 2. Dynamic Text Formatting for Education & Experience
-    renderFormattedBlock(data["Education"], "educationBox");
-    renderFormattedBlock(data["Work Experience"], "experienceBox");
+    // Education & Work Experience
+    renderFormattedBlock(teacher["Education"], "pEducation");
+    renderFormattedBlock(teacher["Work Experience"], "pExperience");
 
-    // 3. Contact Me Formatting
-    const contactBox = document.getElementById("contactBox");
+    // Contact
+    const contactBox = document.getElementById("pContact");
     contactBox.innerHTML = "";
-    if (data["Contact Me"]) {
-      const lines = String(data["Contact Me"]).split("\n");
-      lines.forEach(l => {
-        if(l.trim()) {
+    if (teacher["Contact Me"]) {
+      String(teacher["Contact Me"]).split("\n").forEach(l => {
+        if (l.trim()) {
           const p = document.createElement("p");
           p.innerText = l.trim();
           contactBox.appendChild(p);
@@ -298,23 +463,32 @@
       });
     }
 
-    // 4. Reference Formatting
-    const refBox = document.getElementById("referenceBox");
+    // Reference
+    const refBox = document.getElementById("pReference");
     refBox.innerHTML = "";
-    if (data["Reference"]) {
-      const lines = String(data["Reference"]).split("\n");
-      lines.forEach((l, idx) => {
-        if(l.trim()) {
+    if (teacher["Reference"]) {
+      String(teacher["Reference"]).split("\n").forEach((l, idx) => {
+        if (l.trim()) {
           const p = document.createElement("p");
           p.innerText = l.trim();
-          if (idx === 0) p.style.fontWeight = "bold"; // Reference Name Bold
+          if (idx === 0) p.style.fontWeight = "bold";
           refBox.appendChild(p);
         }
       });
     }
+
+    document.getElementById("directoryView").style.display = "none";
+    document.getElementById("profileView").style.display = "block";
+    window.scrollTo(0, 0);
   }
 
-  // Dynamic Parsing: Pahli line ko Bold/Italic Heading banayega aur baaki ko subtext
+  // Back to Directory
+  function showDirectory() {
+    document.getElementById("profileView").style.display = "none";
+    document.getElementById("directoryView").style.display = "block";
+  }
+
+  // Helper block renderer
   function renderFormattedBlock(rawText, targetId) {
     const container = document.getElementById(targetId);
     container.innerHTML = "";
@@ -326,7 +500,6 @@
       if (lines.length > 0) {
         const div = document.createElement("div");
         div.className = "entry-item";
-        
         let html = `<strong>${lines[0].trim()}</strong>`;
         for (let i = 1; i < lines.length; i++) {
           html += `<div>${lines[i].trim()}</div>`;
