@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Teacher Data</title>
+  <style>
+    * { box-sizing: border-box; font-family: sans-serif; }
+    body { background: #f4f7f6; padding: 20px; }
+    .form-card { max-width: 650px; margin: auto; background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    h2 { color: #426944; text-align: center; margin-bottom: 20px; }
+    .field { margin-bottom: 15px; }
+    label { font-weight: bold; display: block; margin-bottom: 5px; }
+    input, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
+    textarea { height: 90px; resize: vertical; }
+    button { background: #426944; color: #fff; border: none; padding: 12px; width: 100%; font-size: 16px; font-weight: bold; border-radius: 4px; cursor: pointer; }
+    button:hover { background: #325034; }
+    #msg { text-align: center; margin-top: 15px; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+<div class="form-card">
+  <h2>Add Teacher Details</h2>
+  <form id="addForm">
+    <div class="field"><label>Teacher Name (A1)</label><input type="text" id="Teacher Name" required></div>
+    <div class="field"><label>Designation (B1)</label><input type="text" id="Designation" value="TEACHER" required></div>
+    <div class="field"><label>Skills (C1) - Comma or Newline Separated</label><textarea id="Skills" placeholder="Teaching Planning&#10;Learning Creativity&#10;Classroom Conflict Resolution"></textarea></div>
+    <div class="field"><label>Profile Summary (D1)</label><textarea id="Profile Summary"></textarea></div>
+    <div class="field"><label>Education (E1)</label><textarea id="Education" placeholder="Children Education (2012 - 2017)&#10;University, Any City&#10;&#10;Senior High School (2017-2020)&#10;Any University, Any City"></textarea></div>
+    <div class="field"><label>Work Experience (F1)</label><textarea id="Work Experience" placeholder="2017 - 2019&#10;Elementary school teacher.&#10;&#10;2019 - 2020&#10;Home teacher of children with special needs"></textarea></div>
+    <div class="field"><label>Contact Me (G1)</label><textarea id="Contact Me" placeholder="+123-456-7890&#10;hello@reallygreatsite.com&#10;www.reallygreatsite.com"></textarea></div>
+    <div class="field"><label>Reference (H1)</label><textarea id="Reference" placeholder="Kyrie Petrakis&#10;Head Manager, Studio Shodwe&#10;+123-456-7890"></textarea></div>
+    <div class="field"><label>Photo Drive URL (J1)</label><input type="text" id="Photo_url" required></div>
+
+    <button type="submit" id="btn">Submit Data</button>
+  </form>
+  <div id="msg"></div>
+</div>
+
+<script>
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxmbWmOab_WNL8JXi0SO-bFcbaWrzkeP3uGNYZlwxqhlSCTG5_mg0IIKj_yj3_Xjple0Q/exec";
+
+  document.getElementById("addForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const btn = document.getElementById("btn");
+    const msg = document.getElementById("msg");
+    btn.innerText = "Saving...";
+    btn.disabled = true;
+
+    const fields = ["Teacher Name", "Designation", "Skills", "Profile Summary", "Education", "Work Experience", "Contact Me", "Reference", "Photo_url"];
+    let payload = {};
+    fields.forEach(f => {
+      payload[f] = document.getElementById(f).value;
+    });
+
+    fetch(SCRIPT_URL, {
+      method: "POST",
+      body: JSON.stringify(payload)
+    })
+    .then(r => r.json())
+    .then(res => {
+      if(res.status === "success") {
+        msg.style.color = "green";
+        msg.innerText = "Data Saved Successfully!";
+        document.getElementById("addForm").reset();
+      } else {
+        msg.style.color = "red";
+        msg.innerText = "Error: " + res.message;
+      }
+    })
+    .catch(err => {
+      msg.style.color = "red";
+      msg.innerText = "Failed to submit.";
+    })
+    .finally(() => {
+      btn.innerText = "Submit Data";
+      btn.disabled = false;
+    });
+  });
+</script>
+
+</body>
+</html>
