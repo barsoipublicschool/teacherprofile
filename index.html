@@ -4,6 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>School Teachers Directory</title>
+  
+  <!-- SweetAlert2 CDN (English) -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <style>
     * {
       box-sizing: border-box;
@@ -226,7 +230,6 @@
   
   <div id="loader" class="loader">Loading Faculty Data...</div>
 
-  <!-- VIEW 1: DIRECTORY -->
   <div id="directoryView" style="display: none;">
     <div class="directory-header">
       <h1>School Faculty Directory</h1>
@@ -235,7 +238,6 @@
     <div class="teacher-grid" id="teacherGrid"></div>
   </div>
 
-  <!-- VIEW 2: PROFILE -->
   <div id="profileView" style="display: none;">
     <div class="nav-bar">
       <button class="btn-back" onclick="showDirectory()">← Back to Teachers List</button>
@@ -290,10 +292,9 @@
 </div>
 
 <script>
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzflcrRUvs30bfLJB89RRZ6f9Qw1-SckLDtouASVjmFBspz3oYtDqSsIS2LXgeoITsvYQ/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzUecL7uXgULWJvPXWxCZC65gaCrlCoahDzencGgEpZV1lsNh0rf1ZVjnoxc8NxvsA-EA/exec";
   let allTeachersData = [];
 
-  // Override Android Hardware Back Button Action
   window.addEventListener("popstate", function () {
     if (document.getElementById("profileView").style.display === "block") {
       document.getElementById("profileView").style.display = "none";
@@ -301,40 +302,49 @@
     }
   });
 
-  window.addEventListener("load", () => {
-    // Try Fetch API
-    fetch(SCRIPT_URL)
-      .then(res => res.json())
-      .then(handleDataResponse)
-      .catch(err => {
-        console.warn("Fetch failed, attempting script tag fallback for WebView", err);
-        loadScriptFallback();
-      });
-  });
-
-  function loadScriptFallback() {
-    const script = document.createElement("script");
-    script.src = SCRIPT_URL + "?prefix=handleDataResponse";
-    script.onerror = function() {
-      document.getElementById("loader").innerText = "Unable to connect. Please check internet connection.";
-    };
-    document.body.appendChild(script);
-  }
-
-  function handleDataResponse(res) {
+  // Global JSONP Callback Function
+  window.handleDataResponse = function(res) {
     document.getElementById("loader").style.display = "none";
     if (res && res.status === "success" && res.data && res.data.length > 0) {
       allTeachersData = res.data;
       renderDirectory(allTeachersData);
       document.getElementById("directoryView").style.display = "block";
-    } else if (Array.isArray(res)) {
-      allTeachersData = res;
-      renderDirectory(allTeachersData);
-      document.getElementById("directoryView").style.display = "block";
+      
+      // SweetAlert Notification on Success
+      Swal.fire({
+        icon: 'success',
+        title: 'Welcome',
+        text: 'Faculty directory loaded successfully!',
+        timer: 1500,
+        showConfirmButton: false
+      });
+
     } else {
       document.getElementById("loader").innerText = "No Teacher Data Found!";
+      Swal.fire({
+        icon: 'warning',
+        title: 'No Data',
+        text: 'No faculty records were found.',
+        confirmButtonColor: '#426944'
+      });
     }
-  }
+  };
+
+  // Load Data via JSONP Dynamic Script Tag
+  window.addEventListener("DOMContentLoaded", () => {
+    const script = document.createElement("script");
+    script.src = SCRIPT_URL + "?callback=handleDataResponse";
+    script.onerror = function() {
+      document.getElementById("loader").innerText = "Connection Failed. Please check internet access.";
+      Swal.fire({
+        icon: 'error',
+        title: 'Connection Error',
+        text: 'Unable to fetch data. Please check your internet connection and try again.',
+        confirmButtonColor: '#426944'
+      });
+    };
+    document.body.appendChild(script);
+  });
 
   function renderDirectory(teachers) {
     const grid = document.getElementById("teacherGrid");
@@ -360,7 +370,15 @@
 
   function openProfile(id) {
     const teacher = allTeachersData.find(t => t.id === id);
-    if (!teacher) return;
+    if (!teacher) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Teacher profile not found!',
+        confirmButtonColor: '#426944'
+      });
+      return;
+    }
 
     document.getElementById("pName").innerText = teacher["Teacher Name"] || "";
     document.getElementById("pDesignation").innerText = teacher["Designation"] || "TEACHER";
