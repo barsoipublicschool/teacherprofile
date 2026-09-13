@@ -2,19 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>School Teachers Directory</title>
   <style>
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+      font-family: Arial, sans-serif;
     }
 
     body {
-      background-color: #e5e7eb;
-      padding: 15px;
+      background-color: #f3f4f6;
+      padding: 10px;
       display: flex;
       justify-content: center;
       align-items: flex-start;
@@ -26,73 +26,68 @@
       max-width: 800px;
     }
 
-    /* Loader */
     .loader {
       text-align: center;
-      padding: 50px;
-      font-size: 18px;
+      padding: 40px 10px;
+      font-size: 15px;
       font-weight: bold;
       color: #374151;
+      background: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
 
-    /* ================= LIST VIEW STYLES ================= */
     .directory-header {
       background-color: #426944;
       color: white;
-      padding: 20px;
+      padding: 18px;
       border-radius: 8px 8px 0 0;
       text-align: center;
     }
 
     .directory-header h1 {
-      font-size: 24px;
-      margin-bottom: 5px;
+      font-size: 20px;
+      margin-bottom: 4px;
     }
 
     .teacher-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 20px;
-      padding: 20px;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 12px;
+      padding: 12px;
       background: #ffffff;
       border-radius: 0 0 8px 8px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
     }
 
     .teacher-card {
       border: 1px solid #e5e7eb;
       border-radius: 8px;
-      padding: 15px;
+      padding: 12px;
       text-align: center;
       background: #fafafa;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .teacher-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
     }
 
     .teacher-card img {
-      width: 110px;
-      height: 130px;
+      width: 100px;
+      height: 120px;
       object-fit: cover;
       border-radius: 4px;
       border: 2px solid #426944;
-      margin-bottom: 10px;
-      background-color: #ddd;
+      margin-bottom: 8px;
+      background-color: #eee;
     }
 
     .teacher-card h3 {
-      font-size: 16px;
+      font-size: 15px;
       color: #111827;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
 
     .teacher-card p {
-      font-size: 13px;
+      font-size: 11px;
       color: #4b5563;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       font-weight: 600;
       text-transform: uppercase;
     }
@@ -101,202 +96,127 @@
       background-color: #426944;
       color: white;
       border: none;
-      padding: 8px 15px;
+      padding: 8px 12px;
       border-radius: 4px;
       cursor: pointer;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: bold;
       width: 100%;
     }
 
-    .btn-view:hover {
-      background-color: #325034;
-    }
-
-    /* ================= PROFILE VIEW STYLES ================= */
     .nav-bar {
-      margin-bottom: 15px;
+      margin-bottom: 10px;
     }
 
     .btn-back {
       background-color: #374151;
       color: white;
       border: none;
-      padding: 10px 18px;
-      border-radius: 5px;
+      padding: 8px 14px;
+      border-radius: 4px;
       cursor: pointer;
-      font-size: 14px;
+      font-size: 12px;
       font-weight: bold;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
     }
 
     .resume-card {
       background: #ffffff;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-      position: relative;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       overflow: hidden;
+      padding-bottom: 20px;
     }
 
-    /* Header Banner */
     .top-banner {
       background-color: #426944;
       color: #ffffff;
-      padding: 25px 20px 20px 190px;
-      min-height: 120px;
+      padding: 15px;
+      text-align: center;
     }
 
     .top-banner h1 {
-      font-size: 28px;
+      font-size: 22px;
       font-weight: 700;
-      line-height: 1.1;
     }
 
     .top-banner p {
-      font-size: 16px;
-      letter-spacing: 2px;
-      margin-top: 5px;
+      font-size: 12px;
+      letter-spacing: 1px;
+      margin-top: 3px;
       text-transform: uppercase;
-      font-weight: 300;
     }
 
-    /* Floating Image */
-    .photo-frame {
-      position: absolute;
-      top: 15px;
-      left: 20px;
-      width: 145px;
-      height: 175px;
+    .photo-wrapper {
+      text-align: center;
+      margin-top: 15px;
+      margin-bottom: 10px;
+    }
+
+    .photo-frame-img {
+      width: 110px;
+      height: 135px;
       background: #ffffff;
-      padding: 4px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-      z-index: 5;
-    }
-
-    .photo-frame img {
-      width: 100%;
-      height: 100%;
+      padding: 3px;
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
       object-fit: cover;
-      background-color: #eee;
     }
 
-    /* Main Body Flexbox (Responsive) */
     .profile-body {
-      display: flex;
-      margin-top: 40px;
-      flex-wrap: wrap;
-    }
-
-    .left-col {
-      width: 32%;
-      padding: 20px 15px 20px 20px;
-      border-right: 25px solid #426944;
-    }
-
-    .right-col {
-      width: 68%;
-      padding: 20px 25px;
+      padding: 0 15px;
     }
 
     h2.heading {
-      font-size: 14px;
+      font-size: 12px;
       font-weight: 800;
-      letter-spacing: 1px;
-      color: #000000;
-      margin-bottom: 10px;
+      color: #426944;
+      margin-bottom: 6px;
+      margin-top: 12px;
       text-transform: uppercase;
+      border-bottom: 1.5px solid #426944;
+      padding-bottom: 2px;
     }
 
     .skills-list {
       list-style-type: disc;
-      padding-left: 15px;
+      padding-left: 16px;
       font-size: 12px;
       color: #222;
-      line-height: 1.6;
-      font-weight: 600;
+      line-height: 1.5;
     }
 
     .block {
-      margin-bottom: 22px;
+      margin-bottom: 12px;
     }
 
     .summary-text {
       font-size: 12px;
       color: #333;
-      line-height: 1.5;
-      text-align: justify;
+      line-height: 1.4;
     }
 
     .entry-item {
-      margin-bottom: 12px;
+      margin-bottom: 8px;
       font-size: 12px;
       color: #333;
-      line-height: 1.4;
     }
 
     .entry-item strong {
       display: block;
       font-weight: bold;
-      font-style: italic;
       color: #000;
-      font-size: 12.5px;
-    }
-
-    .footer-line {
-      border-top: 1px solid #ccc;
-      margin: 10px 20px 0 20px;
     }
 
     .footer-wrapper {
       display: flex;
-      padding: 15px 20px 25px 20px;
-      flex-wrap: wrap;
+      flex-direction: column;
+      gap: 8px;
+      padding-top: 8px;
     }
 
     .footer-col {
-      width: 50%;
       font-size: 12px;
-      line-height: 1.6;
       color: #333;
-    }
-
-    @media (max-width: 650px) {
-      .top-banner {
-        padding: 15px 15px 15px 15px;
-        text-align: center;
-      }
-
-      .photo-frame {
-        position: relative;
-        top: 0;
-        left: 0;
-        margin: 15px auto 0 auto;
-        width: 140px;
-        height: 165px;
-      }
-
-      .profile-body {
-        margin-top: 15px;
-        flex-direction: column;
-      }
-
-      .left-col {
-        width: 100%;
-        border-right: none;
-        border-bottom: 8px solid #426944;
-        padding: 15px 20px;
-      }
-
-      .right-col {
-        width: 100%;
-        padding: 20px;
-      }
-
-      .footer-col {
-        width: 100%;
-        margin-bottom: 15px;
-      }
     }
   </style>
 </head>
@@ -304,68 +224,64 @@
 
 <div id="app-container">
   
-  <div id="loader" class="loader">Loading Teachers Directory...</div>
+  <div id="loader" class="loader">Loading Faculty Data...</div>
 
-  <!-- VIEW 1: TEACHER LIST DIRECTORY -->
+  <!-- VIEW 1: DIRECTORY -->
   <div id="directoryView" style="display: none;">
     <div class="directory-header">
       <h1>School Faculty Directory</h1>
-      <p>Select a teacher to view full profile</p>
+      <p>Select a teacher to view profile</p>
     </div>
     <div class="teacher-grid" id="teacherGrid"></div>
   </div>
 
-  <!-- VIEW 2: INDIVIDUAL PROFILE CARD -->
+  <!-- VIEW 2: PROFILE -->
   <div id="profileView" style="display: none;">
     <div class="nav-bar">
-      <button class="btn-back" onclick="showDirectory(true)">← Back to Teachers List</button>
+      <button class="btn-back" onclick="showDirectory()">← Back to Teachers List</button>
     </div>
 
     <div class="resume-card">
-      <div class="photo-frame">
-        <img id="pImg" src="" alt="Photo" onerror="this.src='https://via.placeholder.com/150'">
-      </div>
-
       <div class="top-banner">
         <h1 id="pName">--</h1>
         <p id="pDesignation">TEACHER</p>
       </div>
 
+      <div class="photo-wrapper">
+        <img id="pImg" class="photo-frame-img" src="" alt="Photo" onerror="this.src='https://via.placeholder.com/150'">
+      </div>
+
       <div class="profile-body">
-        <div class="left-col">
+        <div class="block">
+          <h2 class="heading">PROFILE SUMMARY</h2>
+          <p class="summary-text" id="pSummary"></p>
+        </div>
+
+        <div class="block">
           <h2 class="heading">SKILLS</h2>
           <ul class="skills-list" id="pSkills"></ul>
         </div>
 
-        <div class="right-col">
-          <div class="block">
-            <h2 class="heading">PROFILE SUMMARY</h2>
-            <p class="summary-text" id="pSummary"></p>
-          </div>
-
-          <div class="block">
-            <h2 class="heading">EDUCATION</h2>
-            <div id="pEducation"></div>
-          </div>
-
-          <div class="block">
-            <h2 class="heading">WORK EXPERIENCE</h2>
-            <div id="pExperience"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="footer-line"></div>
-
-      <div class="footer-wrapper">
-        <div class="footer-col">
-          <h2 class="heading">CONTACT ME</h2>
-          <div id="pContact"></div>
+        <div class="block">
+          <h2 class="heading">EDUCATION</h2>
+          <div id="pEducation"></div>
         </div>
 
-        <div class="footer-col">
-          <h2 class="heading">REFERENCES</h2>
-          <div id="pReference"></div>
+        <div class="block">
+          <h2 class="heading">WORK EXPERIENCE</h2>
+          <div id="pExperience"></div>
+        </div>
+
+        <div class="footer-wrapper">
+          <div class="footer-col">
+            <h2 class="heading">CONTACT ME</h2>
+            <div id="pContact"></div>
+          </div>
+
+          <div class="footer-col">
+            <h2 class="heading">REFERENCES</h2>
+            <div id="pReference"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -375,47 +291,50 @@
 
 <script>
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzflcrRUvs30bfLJB89RRZ6f9Qw1-SckLDtouASVjmFBspz3oYtDqSsIS2LXgeoITsvYQ/exec";
-  
   let allTeachersData = [];
 
-  // Mobile Native Back Button Handling Fix
-  window.addEventListener("popstate", (event) => {
+  // Override Android Hardware Back Button Action
+  window.addEventListener("popstate", function () {
     if (document.getElementById("profileView").style.display === "block") {
-      showDirectory(false);
+      document.getElementById("profileView").style.display = "none";
+      document.getElementById("directoryView").style.display = "block";
     }
   });
 
-  window.addEventListener("DOMContentLoaded", () => {
-    fetch(SCRIPT_URL, { redirect: "follow" })
+  window.addEventListener("load", () => {
+    // Try Fetch API
+    fetch(SCRIPT_URL)
       .then(res => res.json())
-      .then(res => {
-        document.getElementById("loader").style.display = "none";
-        if (res.status === "success" && res.data.length > 0) {
-          allTeachersData = res.data;
-          renderDirectory(allTeachersData);
-          document.getElementById("directoryView").style.display = "block";
-        } else {
-          document.getElementById("loader").innerText = "No Teacher Data Found!";
-        }
-      })
+      .then(handleDataResponse)
       .catch(err => {
-        console.error(err);
-        document.getElementById("loader").innerText = "Error loading data. Retrying...";
-        // Safe Fallback for WebView
-        setTimeout(() => {
-            fetch(SCRIPT_URL)
-            .then(r => r.json())
-            .then(res => {
-                document.getElementById("loader").style.display = "none";
-                allTeachersData = res.data || [];
-                renderDirectory(allTeachersData);
-                document.getElementById("directoryView").style.display = "block";
-            }).catch(() => {
-                document.getElementById("loader").innerText = "Failed to load teacher directory.";
-            });
-        }, 1500);
+        console.warn("Fetch failed, attempting script tag fallback for WebView", err);
+        loadScriptFallback();
       });
   });
+
+  function loadScriptFallback() {
+    const script = document.createElement("script");
+    script.src = SCRIPT_URL + "?prefix=handleDataResponse";
+    script.onerror = function() {
+      document.getElementById("loader").innerText = "Unable to connect. Please check internet connection.";
+    };
+    document.body.appendChild(script);
+  }
+
+  function handleDataResponse(res) {
+    document.getElementById("loader").style.display = "none";
+    if (res && res.status === "success" && res.data && res.data.length > 0) {
+      allTeachersData = res.data;
+      renderDirectory(allTeachersData);
+      document.getElementById("directoryView").style.display = "block";
+    } else if (Array.isArray(res)) {
+      allTeachersData = res;
+      renderDirectory(allTeachersData);
+      document.getElementById("directoryView").style.display = "block";
+    } else {
+      document.getElementById("loader").innerText = "No Teacher Data Found!";
+    }
+  }
 
   function renderDirectory(teachers) {
     const grid = document.getElementById("teacherGrid");
@@ -491,18 +410,17 @@
 
     document.getElementById("directoryView").style.display = "none";
     document.getElementById("profileView").style.display = "block";
+
+    try {
+      window.history.pushState({ page: 'profile' }, 'Profile');
+    } catch(e){}
     
-    // Push state for WebView native back button handling
-    window.history.pushState({ view: 'profile' }, '');
     window.scrollTo(0, 0);
   }
 
-  function showDirectory(isManualClick = true) {
+  function showDirectory() {
     document.getElementById("profileView").style.display = "none";
     document.getElementById("directoryView").style.display = "block";
-    if (isManualClick && window.history.state && window.history.state.view === 'profile') {
-      window.history.back();
-    }
   }
 
   function renderFormattedBlock(rawText, targetId) {
