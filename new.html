@@ -4,7 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>School Faculty Directory</title>
+
   <style>
+    :root {
+      --primary: #1e3a27;
+      --primary-light: #2d5a3c;
+      --accent: #059669;
+      --bg: #f3f4f6;
+      --card-bg: #ffffff;
+      --text-main: #1f2937;
+      --text-muted: #4b5563;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -13,12 +24,13 @@
     }
 
     body {
-      background-color: #f3f4f6;
-      color: #1f2937;
+      background-color: var(--bg);
+      color: var(--text-main);
       padding: 15px;
       min-height: 100vh;
       display: flex;
       justify-content: center;
+      align-items: flex-start;
     }
 
     #app-container {
@@ -26,30 +38,32 @@
       max-width: 900px;
     }
 
+    /* Loader */
     .loader {
       text-align: center;
-      padding: 40px 20px;
+      padding: 50px 20px;
       font-size: 16px;
-      font-weight: 600;
-      color: #374151;
+      font-weight: 700;
+      color: var(--primary);
       background: #ffffff;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
     }
 
-    /* DIRECTORY LIST */
+    /* ================= DIRECTORY LIST STYLES ================= */
     .directory-header {
-      background-color: #2d5a27;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
       color: white;
-      padding: 20px;
-      border-radius: 10px 10px 0 0;
+      padding: 24px 20px;
+      border-radius: 12px 12px 0 0;
       text-align: center;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
 
     .directory-header h1 {
-      font-size: 22px;
-      margin-bottom: 5px;
+      font-size: 24px;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
     }
 
     .directory-header p {
@@ -60,19 +74,19 @@
     .teacher-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 18px;
+      gap: 20px;
       padding: 20px;
       background: #ffffff;
-      border-radius: 0 0 10px 10px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      border-radius: 0 0 12px 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.06);
     }
 
     .teacher-card {
       border: 1px solid #e5e7eb;
-      border-radius: 8px;
-      padding: 15px;
+      border-radius: 10px;
+      padding: 16px;
       text-align: center;
-      background: #ffffff;
+      background: #fafafa;
       transition: all 0.25s ease;
       display: flex;
       flex-direction: column;
@@ -81,212 +95,287 @@
 
     .teacher-card:hover {
       transform: translateY(-4px);
-      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+      border-color: var(--accent);
     }
 
     .teacher-card img {
       width: 110px;
       height: 135px;
       object-fit: cover;
-      border-radius: 6px;
-      border: 2px solid #2d5a27;
+      border-radius: 8px;
+      border: 2px solid var(--primary);
       margin-bottom: 12px;
       background-color: #e5e7eb;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
 
     .teacher-card h3 {
       font-size: 16px;
-      color: #111827;
+      color: var(--text-main);
       margin-bottom: 4px;
+      font-weight: 700;
     }
 
     .teacher-card p {
       font-size: 12px;
-      color: #4b5563;
+      color: var(--accent);
       margin-bottom: 14px;
-      font-weight: 600;
+      font-weight: 700;
       text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
     .btn-view {
-      background-color: #2d5a27;
+      background-color: var(--primary);
       color: white;
       border: none;
       padding: 9px 15px;
-      border-radius: 5px;
+      border-radius: 6px;
       cursor: pointer;
       font-size: 13px;
       font-weight: 600;
       width: 100%;
       margin-top: auto;
+      transition: background 0.2s;
     }
 
     .btn-view:hover {
-      background-color: #1e3d1a;
+      background-color: var(--primary-light);
     }
 
-    /* A4 PROFILE CARD */
+    /* ================= NEW MODERN PROFILE CARD STYLES ================= */
     .nav-bar {
       margin-bottom: 15px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 10px;
     }
 
-    .btn-back {
-      background-color: #374151;
-      color: white;
+    .btn-action {
       border: none;
       padding: 10px 18px;
       border-radius: 6px;
       cursor: pointer;
       font-size: 13px;
-      font-weight: 600;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
     }
 
-    .resume-card {
-      background: #ffffff;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.12);
-      border-radius: 8px;
+    .btn-back {
+      background-color: #374151;
+      color: white;
+    }
+    .btn-back:hover { background-color: #1f2937; }
+
+    .btn-print {
+      background-color: var(--accent);
+      color: white;
+    }
+    .btn-print:hover { background-color: #047857; }
+
+    .profile-card {
+      background: var(--card-bg);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+      border-radius: 12px;
       overflow: hidden;
+      border: 1px solid #e5e7eb;
+    }
+
+    /* Header Banner with RIGHT SIDE Photo */
+    .profile-header-banner {
+      background: linear-gradient(135deg, var(--primary), #112217);
+      color: #ffffff;
+      padding: 25px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       position: relative;
     }
 
-    .top-banner {
-      background-color: #2d5a27;
-      color: #ffffff;
-      padding: 25px 20px 25px 180px;
-      min-height: 120px;
+    .header-text-content {
+      max-width: 65%;
     }
 
-    .top-banner h1 {
-      font-size: 26px;
-      font-weight: 700;
-    }
-
-    .top-banner p {
-      font-size: 14px;
-      letter-spacing: 1.5px;
-      margin-top: 5px;
-      text-transform: uppercase;
-      font-weight: 300;
-    }
-
-    .photo-wrapper {
-      position: absolute;
-      top: 15px;
-      left: 20px;
-      width: 135px;
-      height: 165px;
-      background: #ffffff;
-      padding: 4px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-      border-radius: 4px;
-      z-index: 5;
-    }
-
-    .photo-frame-img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 2px;
-      background-color: #eee;
-    }
-
-    .profile-body {
-      display: flex;
-      margin-top: 35px;
-    }
-
-    .left-col {
-      width: 35%;
-      padding: 20px 15px 20px 20px;
-      border-right: 20px solid #2d5a27;
-    }
-
-    .right-col {
-      width: 65%;
-      padding: 20px 25px;
-    }
-
-    h2.heading {
-      font-size: 13px;
+    .header-text-content h1 {
+      font-size: 28px;
       font-weight: 800;
-      letter-spacing: 1px;
-      color: #111827;
-      margin-bottom: 10px;
-      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      line-height: 1.2;
     }
 
-    .skills-list {
-      list-style-type: disc;
-      padding-left: 16px;
-      font-size: 12px;
-      color: #374151;
-      line-height: 1.6;
+    .header-text-content p {
+      font-size: 14px;
+      color: #a7f3d0;
+      letter-spacing: 2px;
+      margin-top: 6px;
+      text-transform: uppercase;
       font-weight: 600;
     }
 
-    .block {
-      margin-bottom: 20px;
+    /* RIGHT SIDE PHOTO CONTAINER */
+    .photo-right-container {
+      width: 130px;
+      height: 155px;
+      background: #ffffff;
+      padding: 4px;
+      border-radius: 8px;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.3);
+      border: 2px solid #a7f3d0;
+      flex-shrink: 0;
     }
 
-    .summary-text {
-      font-size: 12.5px;
-      color: #374151;
+    .photo-right-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 5px;
+      background-color: #e5e7eb;
+    }
+
+    /* Profile Main Content */
+    .profile-content-grid {
+      display: grid;
+      grid-template-columns: 32% 68%;
+      padding: 25px 30px;
+      gap: 25px;
+    }
+
+    .sidebar-col {
+      border-right: 2px solid #f3f4f6;
+      padding-right: 20px;
+    }
+
+    .main-col {
+      padding-left: 5px;
+    }
+
+    .section-title {
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--primary);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 2px;
+      background: #e5e7eb;
+    }
+
+    .skills-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      list-style: none;
+    }
+
+    .skills-pills li {
+      background: #ecfdf5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11.5px;
+      font-weight: 600;
+    }
+
+    .block-item {
+      margin-bottom: 22px;
+    }
+
+    .summary-p {
+      font-size: 13px;
+      color: var(--text-muted);
       line-height: 1.6;
       text-align: justify;
     }
 
-    .entry-item {
+    .formatted-entry {
       margin-bottom: 12px;
-      font-size: 12px;
-      color: #374151;
+      font-size: 12.5px;
+      color: var(--text-muted);
       line-height: 1.5;
     }
 
-    .entry-item strong {
+    .formatted-entry strong {
       display: block;
       font-weight: 700;
-      font-style: italic;
-      color: #111827;
+      color: var(--text-main);
       font-size: 13px;
+      margin-bottom: 2px;
     }
 
-    .footer-line {
+    /* Footer Details */
+    .profile-footer-section {
+      background-color: #f9fafb;
       border-top: 1px solid #e5e7eb;
-      margin: 10px 20px 0 20px;
+      padding: 20px 30px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
     }
 
-    .footer-wrapper {
-      display: flex;
-      padding: 20px;
-    }
-
-    .footer-col {
-      width: 50%;
-      font-size: 12px;
+    .footer-block {
+      font-size: 12.5px;
       line-height: 1.6;
-      color: #374151;
+      color: var(--text-muted);
     }
 
+    /* PRINT SPECIFIC STYLES FOR PDF SAVE */
+    @media print {
+      body {
+        background: none;
+        padding: 0;
+      }
+      #app-container {
+        max-width: 100%;
+      }
+      .nav-bar, .directory-header, #directoryView, .btn-action {
+        display: none !important;
+      }
+      .profile-card {
+        box-shadow: none;
+        border: none;
+      }
+    }
+
+    /* Responsive Mobile adjustments */
     @media (max-width: 600px) {
-      .top-banner {
-        padding-left: 145px;
+      .profile-header-banner {
+        padding: 20px;
       }
-      .top-banner h1 {
-        font-size: 20px;
+      .header-text-content h1 {
+        font-size: 22px;
       }
-      .photo-wrapper {
-        width: 110px;
-        height: 140px;
+      .photo-right-container {
+        width: 100px;
+        height: 125px;
       }
-      .profile-body {
-        margin-top: 25px;
+      .profile-content-grid {
+        grid-template-columns: 1fr;
+        padding: 20px;
+        gap: 15px;
       }
-      .left-col {
-        border-right-width: 12px;
-        padding-left: 12px;
+      .sidebar-col {
+        border-right: none;
+        border-bottom: 2px solid #f3f4f6;
+        padding-right: 0;
+        padding-bottom: 15px;
+      }
+      .profile-footer-section {
+        grid-template-columns: 1fr;
+        padding: 20px;
       }
     }
   </style>
@@ -297,79 +386,85 @@
   
   <div id="loader" class="loader">Loading Faculty Directory...</div>
 
-  <!-- VIEW 1: DIRECTORY -->
+  <!-- VIEW 1: DIRECTORY LIST -->
   <div id="directoryView" style="display: none;">
     <div class="directory-header">
       <h1>School Faculty Directory</h1>
-      <p>Select a teacher to view full profile</p>
+      <p>Select a teacher to view complete profile</p>
     </div>
     <div class="teacher-grid" id="teacherGrid"></div>
   </div>
 
-  <!-- VIEW 2: PROFILE VIEW -->
+  <!-- VIEW 2: NEW PROFESSIONAL PROFILE CARD (RIGHT SIDE PHOTO & ACTION BUTTONS) -->
   <div id="profileView" style="display: none;">
+    
     <div class="nav-bar">
-      <button class="btn-back" onclick="showDirectory()">← Back to List</button>
+      <button class="btn-action btn-back" onclick="showDirectory()">✕ Close Profile</button>
+      <button class="btn-action btn-print" onclick="window.print()">🖨️ Print / Save PDF</button>
     </div>
 
-    <div class="resume-card">
-      <div class="photo-wrapper">
-        <img id="pImg" class="photo-frame-img" src="" alt="Photo" referrerpolicy="no-referrer" onerror="this.src='https://via.placeholder.com/150'">
+    <div class="profile-card">
+      
+      <!-- Top Banner with Right Side Photo -->
+      <div class="profile-header-banner">
+        <div class="header-text-content">
+          <h1 id="pName">--</h1>
+          <p id="pDesignation">TEACHER</p>
+        </div>
+        <div class="photo-right-container">
+          <img id="pImg" class="photo-right-img" src="" alt="Teacher Photo" referrerpolicy="no-referrer" onerror="this.src='https://via.placeholder.com/150'">
+        </div>
       </div>
 
-      <div class="top-banner">
-        <h1 id="pName">--</h1>
-        <p id="pDesignation">TEACHER</p>
-      </div>
-
-      <div class="profile-body">
-        <div class="left-col">
-          <h2 class="heading">SKILLS</h2>
-          <ul class="skills-list" id="pSkills"></ul>
+      <!-- Main Body -->
+      <div class="profile-content-grid">
+        <div class="sidebar-col">
+          <h2 class="section-title">SKILLS</h2>
+          <ul class="skills-pills" id="pSkills"></ul>
         </div>
 
-        <div class="right-col">
-          <div class="block">
-            <h2 class="heading">PROFILE SUMMARY</h2>
-            <p class="summary-text" id="pSummary"></p>
+        <div class="main-col">
+          <div class="block-item">
+            <h2 class="section-title">PROFILE SUMMARY</h2>
+            <p class="summary-p" id="pSummary"></p>
           </div>
 
-          <div class="block">
-            <h2 class="heading">EDUCATION</h2>
+          <div class="block-item">
+            <h2 class="section-title">EDUCATION</h2>
             <div id="pEducation"></div>
           </div>
 
-          <div class="block">
-            <h2 class="heading">WORK EXPERIENCE</h2>
+          <div class="block-item">
+            <h2 class="section-title">WORK EXPERIENCE</h2>
             <div id="pExperience"></div>
           </div>
         </div>
       </div>
 
-      <div class="footer-line"></div>
-
-      <div class="footer-wrapper">
-        <div class="footer-col">
-          <h2 class="heading">CONTACT ME</h2>
+      <!-- Footer Details -->
+      <div class="profile-footer-section">
+        <div class="footer-block">
+          <h2 class="section-title">CONTACT ME</h2>
           <div id="pContact"></div>
         </div>
 
-        <div class="footer-col">
-          <h2 class="heading">REFERENCES</h2>
+        <div class="footer-block">
+          <h2 class="section-title">REFERENCES</h2>
           <div id="pReference"></div>
         </div>
       </div>
+
     </div>
   </div>
 
 </div>
 
 <script>
-  // Yahan apna deployed Apps Script Exec URL daalein
+  // Aapki Web App URL set kar di gayi hai
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyfgUCFlf9n6aVu3JXhYAdek2E7CajoZz-ZhmyTySbd0BchgZLLjHoe_GEhBdg4Uex4/exec";
   let allTeachersData = [];
 
-  // Google Drive Link Helper (Supports File ID & ResourceKey)
+  // Google Drive Image URL Converter (Supports file ID and resourcekey)
   function getDirectPhotoUrl(url) {
     if (!url) return "https://via.placeholder.com/150";
     
@@ -395,8 +490,16 @@
     return url;
   }
 
+  // Handle Back button on mobile
+  window.addEventListener("popstate", function () {
+    if (document.getElementById("profileView").style.display === "block") {
+      document.getElementById("profileView").style.display = "none";
+      document.getElementById("directoryView").style.display = "block";
+    }
+  });
+
   window.addEventListener("DOMContentLoaded", () => {
-    // 1. Instant Render from Cache
+    // 1. Superfast Local Cache Instant Load
     try {
       const cachedData = localStorage.getItem("cached_faculty_data");
       if (cachedData) {
@@ -406,7 +509,7 @@
       }
     } catch(e) {}
 
-    // 2. Fetch fresh data from network
+    // 2. Fetch fresh data from Apps Script
     fetchData();
   });
 
@@ -512,6 +615,11 @@
 
     document.getElementById("directoryView").style.display = "none";
     document.getElementById("profileView").style.display = "block";
+
+    try {
+      window.history.pushState({ page: 'profile' }, 'Profile');
+    } catch(e){}
+    
     window.scrollTo(0, 0);
   }
 
@@ -530,7 +638,7 @@
       const lines = block.split("\n").filter(l => l.trim() !== "");
       if (lines.length > 0) {
         const div = document.createElement("div");
-        div.className = "entry-item";
+        div.className = "formatted-entry";
         let html = `<strong>${lines[0].trim()}</strong>`;
         for (let i = 1; i < lines.length; i++) {
           html += `<div>${lines[i].trim()}</div>`;
@@ -541,5 +649,6 @@
     });
   }
 </script>
+
 </body>
 </html>
