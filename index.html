@@ -4,9 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>School Teachers Directory</title>
-  
-  <!-- SweetAlert2 CDN (English) -->
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <style>
     * {
@@ -32,8 +29,8 @@
 
     .loader {
       text-align: center;
-      padding: 40px 10px;
-      font-size: 15px;
+      padding: 30px 10px;
+      font-size: 14px;
       font-weight: bold;
       color: #374151;
       background: #ffffff;
@@ -44,7 +41,7 @@
     .directory-header {
       background-color: #426944;
       color: white;
-      padding: 18px;
+      padding: 16px;
       border-radius: 8px 8px 0 0;
       text-align: center;
     }
@@ -56,7 +53,7 @@
 
     .teacher-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
       gap: 12px;
       padding: 12px;
       background: #ffffff;
@@ -302,49 +299,50 @@
     }
   });
 
-  // Global JSONP Callback Function
+  // Fast JSONP Callback Function
   window.handleDataResponse = function(res) {
-    document.getElementById("loader").style.display = "none";
     if (res && res.status === "success" && res.data && res.data.length > 0) {
       allTeachersData = res.data;
-      renderDirectory(allTeachersData);
-      document.getElementById("directoryView").style.display = "block";
       
-      // SweetAlert Notification on Success
-      Swal.fire({
-        icon: 'success',
-        title: 'Welcome',
-        text: 'Faculty directory loaded successfully!',
-        timer: 1500,
-        showConfirmButton: false
-      });
+      // Save data locally for superfast subsequent opens
+      try {
+        localStorage.setItem("cached_faculty_data", JSON.stringify(res.data));
+      } catch(e) {}
 
-    } else {
+      renderDirectory(allTeachersData);
+      showMainDirectoryView();
+    } else if (!allTeachersData.length) {
       document.getElementById("loader").innerText = "No Teacher Data Found!";
-      Swal.fire({
-        icon: 'warning',
-        title: 'No Data',
-        text: 'No faculty records were found.',
-        confirmButtonColor: '#426944'
-      });
     }
   };
 
-  // Load Data via JSONP Dynamic Script Tag
+  // Instant Load Mechanism
   window.addEventListener("DOMContentLoaded", () => {
+    // 1. Try Instant Render from Local Cache
+    try {
+      const cachedData = localStorage.getItem("cached_faculty_data");
+      if (cachedData) {
+        allTeachersData = JSON.parse(cachedData);
+        renderDirectory(allTeachersData);
+        showMainDirectoryView();
+      }
+    } catch(e) {}
+
+    // 2. Load fresh data in background
     const script = document.createElement("script");
     script.src = SCRIPT_URL + "?callback=handleDataResponse";
     script.onerror = function() {
-      document.getElementById("loader").innerText = "Connection Failed. Please check internet access.";
-      Swal.fire({
-        icon: 'error',
-        title: 'Connection Error',
-        text: 'Unable to fetch data. Please check your internet connection and try again.',
-        confirmButtonColor: '#426944'
-      });
+      if (!allTeachersData.length) {
+        document.getElementById("loader").innerText = "Connection Failed. Please check internet connection.";
+      }
     };
     document.body.appendChild(script);
   });
+
+  function showMainDirectoryView() {
+    document.getElementById("loader").style.display = "none";
+    document.getElementById("directoryView").style.display = "block";
+  }
 
   function renderDirectory(teachers) {
     const grid = document.getElementById("teacherGrid");
@@ -359,7 +357,7 @@
       const des = t["Designation"] || "TEACHER";
 
       card.innerHTML = `
-        <img src="${photo}" alt="${name}" onerror="this.src='https://via.placeholder.com/150'">
+        <img src="${photo}" alt="${name}" loading="lazy" onerror="this.src='https://via.placeholder.com/150'">
         <h3>${name}</h3>
         <p>${des}</p>
         <button class="btn-view" onclick="openProfile(${t.id})">View Profile</button>
@@ -370,15 +368,7 @@
 
   function openProfile(id) {
     const teacher = allTeachersData.find(t => t.id === id);
-    if (!teacher) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Teacher profile not found!',
-        confirmButtonColor: '#426944'
-      });
-      return;
-    }
+    if (!teacher) return;
 
     document.getElementById("pName").innerText = teacher["Teacher Name"] || "";
     document.getElementById("pDesignation").innerText = teacher["Designation"] || "TEACHER";
