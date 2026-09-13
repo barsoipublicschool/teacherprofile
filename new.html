@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>School Faculty Directory</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #f3f4f6;
+      color: #1f2937;
+      padding: 15px;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+    }
+
+    #app-container {
+      width: 100%;
+      max-width: 900px;
+    }
+
+    .loader {
+      text-align: center;
+      padding: 40px 20px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #374151;
+      background: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    /* DIRECTORY LIST */
+    .directory-header {
+      background-color: #2d5a27;
+      color: white;
+      padding: 20px;
+      border-radius: 10px 10px 0 0;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .directory-header h1 {
+      font-size: 22px;
+      margin-bottom: 5px;
+    }
+
+    .directory-header p {
+      font-size: 13px;
+      opacity: 0.9;
+    }
+
+    .teacher-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 18px;
+      padding: 20px;
+      background: #ffffff;
+      border-radius: 0 0 10px 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+
+    .teacher-card {
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+      background: #ffffff;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .teacher-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    }
+
+    .teacher-card img {
+      width: 110px;
+      height: 135px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 2px solid #2d5a27;
+      margin-bottom: 12px;
+      background-color: #e5e7eb;
+    }
+
+    .teacher-card h3 {
+      font-size: 16px;
+      color: #111827;
+      margin-bottom: 4px;
+    }
+
+    .teacher-card p {
+      font-size: 12px;
+      color: #4b5563;
+      margin-bottom: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .btn-view {
+      background-color: #2d5a27;
+      color: white;
+      border: none;
+      padding: 9px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      width: 100%;
+      margin-top: auto;
+    }
+
+    .btn-view:hover {
+      background-color: #1e3d1a;
+    }
+
+    /* A4 PROFILE CARD */
+    .nav-bar {
+      margin-bottom: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .btn-back {
+      background-color: #374151;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .resume-card {
+      background: #ffffff;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .top-banner {
+      background-color: #2d5a27;
+      color: #ffffff;
+      padding: 25px 20px 25px 180px;
+      min-height: 120px;
+    }
+
+    .top-banner h1 {
+      font-size: 26px;
+      font-weight: 700;
+    }
+
+    .top-banner p {
+      font-size: 14px;
+      letter-spacing: 1.5px;
+      margin-top: 5px;
+      text-transform: uppercase;
+      font-weight: 300;
+    }
+
+    .photo-wrapper {
+      position: absolute;
+      top: 15px;
+      left: 20px;
+      width: 135px;
+      height: 165px;
+      background: #ffffff;
+      padding: 4px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      border-radius: 4px;
+      z-index: 5;
+    }
+
+    .photo-frame-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 2px;
+      background-color: #eee;
+    }
+
+    .profile-body {
+      display: flex;
+      margin-top: 35px;
+    }
+
+    .left-col {
+      width: 35%;
+      padding: 20px 15px 20px 20px;
+      border-right: 20px solid #2d5a27;
+    }
+
+    .right-col {
+      width: 65%;
+      padding: 20px 25px;
+    }
+
+    h2.heading {
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: #111827;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+
+    .skills-list {
+      list-style-type: disc;
+      padding-left: 16px;
+      font-size: 12px;
+      color: #374151;
+      line-height: 1.6;
+      font-weight: 600;
+    }
+
+    .block {
+      margin-bottom: 20px;
+    }
+
+    .summary-text {
+      font-size: 12.5px;
+      color: #374151;
+      line-height: 1.6;
+      text-align: justify;
+    }
+
+    .entry-item {
+      margin-bottom: 12px;
+      font-size: 12px;
+      color: #374151;
+      line-height: 1.5;
+    }
+
+    .entry-item strong {
+      display: block;
+      font-weight: 700;
+      font-style: italic;
+      color: #111827;
+      font-size: 13px;
+    }
+
+    .footer-line {
+      border-top: 1px solid #e5e7eb;
+      margin: 10px 20px 0 20px;
+    }
+
+    .footer-wrapper {
+      display: flex;
+      padding: 20px;
+    }
+
+    .footer-col {
+      width: 50%;
+      font-size: 12px;
+      line-height: 1.6;
+      color: #374151;
+    }
+
+    @media (max-width: 600px) {
+      .top-banner {
+        padding-left: 145px;
+      }
+      .top-banner h1 {
+        font-size: 20px;
+      }
+      .photo-wrapper {
+        width: 110px;
+        height: 140px;
+      }
+      .profile-body {
+        margin-top: 25px;
+      }
+      .left-col {
+        border-right-width: 12px;
+        padding-left: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div id="app-container">
+  
+  <div id="loader" class="loader">Loading Faculty Directory...</div>
+
+  <!-- VIEW 1: DIRECTORY -->
+  <div id="directoryView" style="display: none;">
+    <div class="directory-header">
+      <h1>School Faculty Directory</h1>
+      <p>Select a teacher to view full profile</p>
+    </div>
+    <div class="teacher-grid" id="teacherGrid"></div>
+  </div>
+
+  <!-- VIEW 2: PROFILE VIEW -->
+  <div id="profileView" style="display: none;">
+    <div class="nav-bar">
+      <button class="btn-back" onclick="showDirectory()">← Back to List</button>
+    </div>
+
+    <div class="resume-card">
+      <div class="photo-wrapper">
+        <img id="pImg" class="photo-frame-img" src="" alt="Photo" referrerpolicy="no-referrer" onerror="this.src='https://via.placeholder.com/150'">
+      </div>
+
+      <div class="top-banner">
+        <h1 id="pName">--</h1>
+        <p id="pDesignation">TEACHER</p>
+      </div>
+
+      <div class="profile-body">
+        <div class="left-col">
+          <h2 class="heading">SKILLS</h2>
+          <ul class="skills-list" id="pSkills"></ul>
+        </div>
+
+        <div class="right-col">
+          <div class="block">
+            <h2 class="heading">PROFILE SUMMARY</h2>
+            <p class="summary-text" id="pSummary"></p>
+          </div>
+
+          <div class="block">
+            <h2 class="heading">EDUCATION</h2>
+            <div id="pEducation"></div>
+          </div>
+
+          <div class="block">
+            <h2 class="heading">WORK EXPERIENCE</h2>
+            <div id="pExperience"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-line"></div>
+
+      <div class="footer-wrapper">
+        <div class="footer-col">
+          <h2 class="heading">CONTACT ME</h2>
+          <div id="pContact"></div>
+        </div>
+
+        <div class="footer-col">
+          <h2 class="heading">REFERENCES</h2>
+          <div id="pReference"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Yahan apna deployed Apps Script Exec URL daalein
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyfgUCFlf9n6aVu3JXhYAdek2E7CajoZz-ZhmyTySbd0BchgZLLjHoe_GEhBdg4Uex4/exec";
+  let allTeachersData = [];
+
+  // Google Drive Link Helper (Supports File ID & ResourceKey)
+  function getDirectPhotoUrl(url) {
+    if (!url) return "https://via.placeholder.com/150";
+    
+    let fileId = "";
+    const idMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/);
+    if (idMatch && idMatch[1]) {
+      fileId = idMatch[1];
+    }
+
+    let resourceKey = "";
+    const rkMatch = url.match(/resourcekey=([a-zA-Z0-9_-]+)/);
+    if (rkMatch && rkMatch[1]) {
+      resourceKey = rkMatch[1];
+    }
+
+    if (fileId) {
+      let finalUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=s500`;
+      if (resourceKey) {
+        finalUrl += `&resourcekey=${resourceKey}`;
+      }
+      return finalUrl;
+    }
+    return url;
+  }
+
+  window.addEventListener("DOMContentLoaded", () => {
+    // 1. Instant Render from Cache
+    try {
+      const cachedData = localStorage.getItem("cached_faculty_data");
+      if (cachedData) {
+        allTeachersData = JSON.parse(cachedData);
+        renderDirectory(allTeachersData);
+        showMainDirectoryView();
+      }
+    } catch(e) {}
+
+    // 2. Fetch fresh data from network
+    fetchData();
+  });
+
+  function fetchData() {
+    fetch(SCRIPT_URL, { method: "GET", redirect: "follow" })
+      .then(res => res.json())
+      .then(res => {
+        if (res && res.status === "success" && res.data && res.data.length > 0) {
+          allTeachersData = res.data;
+          try {
+            localStorage.setItem("cached_faculty_data", JSON.stringify(res.data));
+          } catch(e) {}
+          renderDirectory(allTeachersData);
+          showMainDirectoryView();
+        } else if (!allTeachersData.length) {
+          document.getElementById("loader").innerText = "No Teacher Data Found!";
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        if (!allTeachersData.length) {
+          document.getElementById("loader").innerText = "Connection Error. Please check internet connection.";
+        }
+      });
+  }
+
+  function showMainDirectoryView() {
+    document.getElementById("loader").style.display = "none";
+    document.getElementById("directoryView").style.display = "block";
+  }
+
+  function renderDirectory(teachers) {
+    const grid = document.getElementById("teacherGrid");
+    grid.innerHTML = "";
+
+    teachers.forEach((t) => {
+      const card = document.createElement("div");
+      card.className = "teacher-card";
+      
+      const photo = getDirectPhotoUrl(t["Photo_url"]);
+      const name = t["Teacher Name"] || "Unknown";
+      const des = t["Designation"] || "TEACHER";
+
+      card.innerHTML = `
+        <img src="${photo}" alt="${name}" loading="lazy" referrerpolicy="no-referrer" onerror="this.src='https://via.placeholder.com/150'">
+        <h3>${name}</h3>
+        <p>${des}</p>
+        <button class="btn-view" onclick="openProfile(${t.id})">View Profile</button>
+      `;
+      grid.appendChild(card);
+    });
+  }
+
+  function openProfile(id) {
+    const teacher = allTeachersData.find(t => t.id === id);
+    if (!teacher) return;
+
+    document.getElementById("pName").innerText = teacher["Teacher Name"] || "";
+    document.getElementById("pDesignation").innerText = teacher["Designation"] || "TEACHER";
+    document.getElementById("pImg").src = getDirectPhotoUrl(teacher["Photo_url"]);
+    document.getElementById("pSummary").innerText = teacher["Profile Summary"] || "";
+
+    const skillsList = document.getElementById("pSkills");
+    skillsList.innerHTML = "";
+    if (teacher["Skills"]) {
+      const skillsArr = String(teacher["Skills"]).split(/,|\n/);
+      skillsArr.forEach(s => {
+        if (s.trim()) {
+          const li = document.createElement("li");
+          li.innerText = s.trim();
+          skillsList.appendChild(li);
+        }
+      });
+    }
+
+    renderFormattedBlock(teacher["Education"], "pEducation");
+    renderFormattedBlock(teacher["Work Experience"], "pExperience");
+
+    const contactBox = document.getElementById("pContact");
+    contactBox.innerHTML = "";
+    if (teacher["Contact Me"]) {
+      String(teacher["Contact Me"]).split("\n").forEach(l => {
+        if (l.trim()) {
+          const p = document.createElement("p");
+          p.innerText = l.trim();
+          contactBox.appendChild(p);
+        }
+      });
+    }
+
+    const refBox = document.getElementById("pReference");
+    refBox.innerHTML = "";
+    if (teacher["Reference"]) {
+      String(teacher["Reference"]).split("\n").forEach((l, idx) => {
+        if (l.trim()) {
+          const p = document.createElement("p");
+          p.innerText = l.trim();
+          if (idx === 0) p.style.fontWeight = "bold";
+          refBox.appendChild(p);
+        }
+      });
+    }
+
+    document.getElementById("directoryView").style.display = "none";
+    document.getElementById("profileView").style.display = "block";
+    window.scrollTo(0, 0);
+  }
+
+  function showDirectory() {
+    document.getElementById("profileView").style.display = "none";
+    document.getElementById("directoryView").style.display = "block";
+  }
+
+  function renderFormattedBlock(rawText, targetId) {
+    const container = document.getElementById(targetId);
+    container.innerHTML = "";
+    if (!rawText) return;
+
+    const blocks = String(rawText).split("\n\n");
+    blocks.forEach(block => {
+      const lines = block.split("\n").filter(l => l.trim() !== "");
+      if (lines.length > 0) {
+        const div = document.createElement("div");
+        div.className = "entry-item";
+        let html = `<strong>${lines[0].trim()}</strong>`;
+        for (let i = 1; i < lines.length; i++) {
+          html += `<div>${lines[i].trim()}</div>`;
+        }
+        div.innerHTML = html;
+        container.appendChild(div);
+      }
+    });
+  }
+</script>
+</body>
+</html>
