@@ -299,24 +299,6 @@
     }
   });
 
-  // Fast JSONP Callback Function
-  window.handleDataResponse = function(res) {
-    if (res && res.status === "success" && res.data && res.data.length > 0) {
-      allTeachersData = res.data;
-      
-      // Save data locally for superfast subsequent opens
-      try {
-        localStorage.setItem("cached_faculty_data", JSON.stringify(res.data));
-      } catch(e) {}
-
-      renderDirectory(allTeachersData);
-      showMainDirectoryView();
-    } else if (!allTeachersData.length) {
-      document.getElementById("loader").innerText = "No Teacher Data Found!";
-    }
-  };
-
-  // Instant Load Mechanism
   window.addEventListener("DOMContentLoaded", () => {
     // 1. Try Instant Render from Local Cache
     try {
@@ -328,16 +310,32 @@
       }
     } catch(e) {}
 
-    // 2. Load fresh data in background
-    const script = document.createElement("script");
-    script.src = SCRIPT_URL + "?callback=handleDataResponse";
-    script.onerror = function() {
-      if (!allTeachersData.length) {
-        document.getElementById("loader").innerText = "Connection Failed. Please check internet connection.";
-      }
-    };
-    document.body.appendChild(script);
+    // 2. Fetch fresh data using standard fetch API
+    fetchData();
   });
+
+  function fetchData() {
+    fetch(SCRIPT_URL)
+      .then(response => response.json())
+      .then(res => {
+        if (res && res.status === "success" && res.data && res.data.length > 0) {
+          allTeachersData = res.data;
+          try {
+            localStorage.setItem("cached_faculty_data", JSON.stringify(res.data));
+          } catch(e) {}
+          renderDirectory(allTeachersData);
+          showMainDirectoryView();
+        } else if (!allTeachersData.length) {
+          document.getElementById("loader").innerText = "No Teacher Data Found!";
+        }
+      })
+      .catch(err => {
+        console.error("Fetch Error:", err);
+        if (!allTeachersData.length) {
+          document.getElementById("loader").innerText = "Connection Error. Please check internet connection.";
+        }
+      });
+  }
 
   function showMainDirectoryView() {
     document.getElementById("loader").style.display = "none";
