@@ -3,406 +3,290 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Faculty Directory & Resume</title>
+  <title>Barsoi Public School - List of Faculties</title>
 
   <style>
     :root {
-      --header-bg: #4a3b32;
-      --sub-header-bg: #2b1f18;
-      --sidebar-bg: #7d6e65;
-      --text-dark: #222222;
-      --text-light: #ffffff;
-      --accent-triangle: #2b1f18;
+      --brand-header: #1e3a27;
+      --brand-sub: #2d5a3c;
+      --card-bg: #ffffff;
+      --sidebar-bg: #6b5b52;
+      --text-main: #111827;
+      --text-muted: #374151;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
     body {
-      background-color: #e5e5e5;
-      color: var(--text-dark);
+      background-color: #f3f4f6;
+      color: var(--text-main);
       padding: 15px;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
+      padding-bottom: 80px;
     }
 
     #app-container {
-      width: 100%;
-      max-width: 850px;
+      max-width: 900px;
+      margin: 0 auto;
     }
 
-    /* Loader */
-    .loader {
-      text-align: center;
-      padding: 50px 20px;
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--header-bg);
-      background: #ffffff;
-      border-radius: 8px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
-
-    /* DIRECTORY GRID VIEW */
-    .directory-header {
-      background: var(--header-bg);
+    /* MAIN APP HEADER */
+    .app-main-header {
+      background: linear-gradient(135deg, var(--brand-header), var(--brand-sub));
       color: white;
-      padding: 20px;
-      border-radius: 8px 8px 0 0;
       text-align: center;
+      padding: 25px 15px;
+      border-radius: 10px;
+      margin-bottom: 25px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.12);
     }
 
-    .directory-header h1 {
-      font-size: 22px;
-      text-transform: uppercase;
+    .app-main-header h1 {
+      font-size: 26px;
+      font-weight: 800;
       letter-spacing: 1px;
-    }
-
-    .teacher-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 15px;
-      padding: 20px;
-      background: #ffffff;
-      border-radius: 0 0 8px 8px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
-
-    .teacher-card {
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      padding: 12px;
-      text-align: center;
-      background: #fafafa;
-    }
-
-    .teacher-card img {
-      width: 100px;
-      height: 125px;
-      object-fit: cover;
-      border-radius: 4px;
-      margin-bottom: 10px;
-    }
-
-    .teacher-card h3 {
-      font-size: 15px;
-      color: var(--header-bg);
-      margin-bottom: 4px;
-    }
-
-    .teacher-card p {
-      font-size: 11px;
-      color: #666;
-      margin-bottom: 10px;
       text-transform: uppercase;
-      font-weight: bold;
     }
 
-    .btn-view {
-      background-color: var(--header-bg);
-      color: white;
-      border: none;
-      padding: 8px 12px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 12px;
-      font-weight: bold;
-      width: 100%;
-    }
-
-    /* ================= EXACT RESUME DESIGN ================= */
-    .resume-wrapper {
-      background: #ffffff;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      margin-bottom: 70px;
-    }
-
-    /* HEADER SECTION */
-    .resume-header {
-      display: flex;
-      position: relative;
-      background: #ffffff;
-      min-height: 180px;
-    }
-
-    .header-left-title {
-      width: 60%;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      z-index: 2;
-    }
-
-    .name-box {
-      background-color: var(--header-bg);
-      color: #ffffff;
-      padding: 25px 20px 15px 30px;
-    }
-
-    .name-box h1 {
-      font-size: 32px;
-      font-weight: 800;
-      line-height: 1.1;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .desig-box {
-      background-color: var(--sub-header-bg);
-      color: #ffffff;
-      padding: 12px 20px 12px 30px;
-    }
-
-    .desig-box h2 {
-      font-size: 16px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-    }
-
-    /* RIGHT PHOTO OVERLAY WITH CURVED BACKGROUND */
-    .header-right-photo {
-      width: 40%;
-      position: relative;
-      display: flex;
-      justify-content: flex-end;
-      align-items: flex-start;
-      background: #ffffff;
-    }
-
-    .curved-bg-shape {
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 100%;
-      height: 100%;
-      background: var(--sidebar-bg);
-      border-bottom-left-radius: 100%;
-      z-index: 1;
-    }
-
-    .photo-frame-circle {
-      position: relative;
-      z-index: 3;
-      width: 170px;
-      height: 210px;
-      margin-top: 10px;
-      margin-right: 20px;
-      border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
-      overflow: hidden;
-      border: 4px solid #ffffff;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-      background-color: #ddd;
-    }
-
-    .photo-frame-circle img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    /* RESUME MAIN CONTENT (2 COLUMNS) */
-    .resume-body {
-      display: flex;
-      min-height: 600px;
-    }
-
-    /* LEFT MAIN COLUMN */
-    .left-main-col {
-      width: 60%;
-      padding: 30px 25px 30px 30px;
-      background: #ffffff;
-    }
-
-    /* RIGHT SIDEBAR COLUMN */
-    .right-sidebar-col {
-      width: 40%;
-      background-color: var(--sidebar-bg);
-      color: var(--text-light);
-      padding: 30px 20px 30px 25px;
-    }
-
-    /* TYPOGRAPHY & SECTION HEADINGS */
-    .section-heading-left {
-      font-size: 16px;
-      font-weight: 800;
-      color: #000000;
-      text-transform: uppercase;
-      margin-top: 15px;
-      margin-bottom: 6px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .section-heading-left::before {
-      content: '►';
-      font-size: 12px;
-      color: var(--accent-triangle);
-    }
-
-    .dashed-line {
-      border-bottom: 1.5px dashed #000000;
-      margin-bottom: 12px;
-      width: 100%;
-    }
-
-    .section-heading-right {
-      font-size: 16px;
-      font-weight: 800;
-      color: #ffffff;
-      text-transform: uppercase;
-      margin-top: 15px;
-      margin-bottom: 6px;
+    .app-main-header p {
+      font-size: 14px;
+      opacity: 0.9;
+      margin-top: 5px;
       letter-spacing: 0.5px;
     }
 
-    .dashed-line-white {
-      border-bottom: 1.5px dashed #ffffff;
-      margin-bottom: 12px;
-      width: 100%;
-      opacity: 0.8;
-    }
-
-    /* CONTENT STYLES */
-    .content-block {
-      margin-bottom: 20px;
-    }
-
-    .about-text {
-      font-size: 12px;
-      color: #333333;
-      line-height: 1.5;
-      text-align: justify;
-    }
-
-    .formatted-entry {
-      margin-bottom: 12px;
-      font-size: 12px;
-      color: #333333;
-      line-height: 1.4;
-    }
-
-    .formatted-entry strong {
-      display: block;
-      font-size: 13px;
-      color: #000000;
-      font-weight: 700;
-      margin-bottom: 2px;
-    }
-
-    /* RIGHT SIDEBAR CONTENT */
-    .sidebar-list {
-      list-style-type: disc;
-      padding-left: 18px;
-      font-size: 12px;
-      line-height: 1.6;
-      color: #ffffff;
-    }
-
-    .sidebar-list li {
-      margin-bottom: 4px;
-    }
-
-    .contact-item {
-      font-size: 12px;
-      color: #ffffff;
-      line-height: 1.8;
-      margin-bottom: 4px;
-      word-break: break-all;
-    }
-
-    /* RESUME BOTTOM ACCENT FOOTER */
-    .resume-bottom-bar {
-      height: 25px;
-      background-color: var(--sub-header-bg);
-      width: 100%;
-    }
-
-    /* ACTION BUTTONS BAR AT BOTTOM */
-    .action-toolbar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background: rgba(30, 30, 30, 0.95);
-      padding: 12px 20px;
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      z-index: 9999;
-      box-shadow: 0 -4px 15px rgba(0,0,0,0.2);
-    }
-
-    .btn-act {
-      border: none;
-      padding: 10px 22px;
-      border-radius: 20px;
-      font-size: 13px;
+    /* LOADER */
+    .loader {
+      text-align: center;
+      padding: 40px;
+      background: white;
+      border-radius: 10px;
       font-weight: bold;
-      cursor: pointer;
-      display: inline-flex;
+      color: var(--brand-header);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    /* SINGLE PAGE FACULTY LIST CONTAINER */
+    .faculty-list-container {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    /* INDIVIDUAL TEACHER RESUME CARD */
+    .teacher-resume-card {
+      background: var(--card-bg);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      border: 1px solid #e5e7eb;
+      page-break-inside: avoid;
+    }
+
+    /* HEADER BANNER WITH RIGHT SIDE PHOTO */
+    .card-top-header {
+      background-color: var(--brand-header);
+      color: white;
+      padding: 20px 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header-info {
+      max-width: 70%;
+    }
+
+    .header-info h2 {
+      font-size: 24px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .header-info p {
+      font-size: 13px;
+      color: #a7f3d0;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-top: 4px;
+      letter-spacing: 1px;
+    }
+
+    .photo-frame {
+      width: 110px;
+      height: 135px;
+      background: #ffffff;
+      padding: 3px;
+      border-radius: 6px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+      flex-shrink: 0;
+    }
+
+    .photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 4px;
+      background: #eee;
+    }
+
+    /* CARD BODY (2 COLUMNS) */
+    .card-body-grid {
+      display: grid;
+      grid-template-columns: 62% 38%;
+    }
+
+    .left-section {
+      padding: 20px 20px 20px 25px;
+    }
+
+    .right-sidebar {
+      background-color: var(--sidebar-bg);
+      color: white;
+      padding: 20px;
+    }
+
+    /* SECTION TITLES */
+    .sec-title-left {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--brand-header);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      display: flex;
       align-items: center;
       gap: 6px;
     }
 
-    .btn-act-print {
-      background-color: #2563eb;
-      color: white;
+    .sec-title-left::before {
+      content: '►';
+      font-size: 10px;
     }
 
-    .btn-act-close {
-      background-color: #dc2626;
-      color: white;
+    .divider-line {
+      border-bottom: 1.5px dashed #d1d5db;
+      margin-bottom: 12px;
     }
 
-    /* PRINT RULES FOR PDF EXPORT */
+    .sec-title-right {
+      font-size: 13px;
+      font-weight: 800;
+      color: #ffffff;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .divider-line-white {
+      border-bottom: 1.5px dashed rgba(255,255,255,0.4);
+      margin-bottom: 12px;
+    }
+
+    /* CONTENT FORMATTING */
+    .block-group {
+      margin-bottom: 16px;
+    }
+
+    .summary-text {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      text-align: justify;
+    }
+
+    .entry-item {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+
+    .entry-item strong {
+      display: block;
+      color: var(--text-main);
+      font-size: 12.5px;
+    }
+
+    .skills-ul {
+      list-style-type: disc;
+      padding-left: 18px;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .contact-line {
+      font-size: 12px;
+      line-height: 1.5;
+      margin-bottom: 4px;
+      word-break: break-all;
+    }
+
+    /* CARD FOOTER ACCENT */
+    .card-bottom-bar {
+      height: 10px;
+      background-color: var(--brand-sub);
+    }
+
+    /* FIXED PRINT TOOLBAR AT BOTTOM */
+    .fixed-toolbar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: #111827;
+      padding: 12px;
+      text-align: center;
+      z-index: 9999;
+      box-shadow: 0 -4px 12px rgba(0,0,0,0.2);
+    }
+
+    .btn-print-main {
+      background: #059669;
+      color: white;
+      border: none;
+      padding: 10px 25px;
+      font-size: 14px;
+      font-weight: bold;
+      border-radius: 25px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    .btn-print-main:hover {
+      background: #047857;
+    }
+
+    /* PRINT STYLES FOR PERFECT A4 PDF */
     @media print {
       body {
-        background: none;
+        background: white;
         padding: 0;
       }
-      #app-container {
-        max-width: 100%;
-      }
-      .action-toolbar, #directoryView, .directory-header {
+      .fixed-toolbar, .app-main-header {
         display: none !important;
       }
-      .resume-wrapper {
+      .teacher-resume-card {
         box-shadow: none;
-        margin-bottom: 0;
+        border: 1px solid #ddd;
+        margin-bottom: 20px;
+        page-break-after: always;
       }
     }
 
-    @media (max-width: 650px) {
-      .resume-header {
-        flex-direction: column-reverse;
+    @media (max-width: 600px) {
+      .card-body-grid {
+        grid-template-columns: 1fr;
       }
-      .header-left-title, .header-right-photo {
-        width: 100%;
+      .header-info h2 {
+        font-size: 18px;
       }
-      .header-right-photo {
-        justify-content: center;
-        padding-top: 15px;
-      }
-      .photo-frame-circle {
-        margin-right: 0;
-      }
-      .resume-body {
-        flex-direction: column;
-      }
-      .left-main-col, .right-sidebar-col {
-        width: 100%;
+      .photo-frame {
+        width: 90px;
+        height: 115px;
       }
     }
   </style>
@@ -410,106 +294,29 @@
 <body>
 
 <div id="app-container">
-  
-  <div id="loader" class="loader">Loading Faculty Data...</div>
 
-  <!-- VIEW 1: DIRECTORY -->
-  <div id="directoryView" style="display: none;">
-    <div class="directory-header">
-      <h1>Faculty Directory</h1>
-    </div>
-    <div class="teacher-grid" id="teacherGrid"></div>
+  <!-- HEADING -->
+  <div class="app-main-header">
+    <h1>Barsoi Public School</h1>
+    <p>List of Faculties</p>
   </div>
 
-  <!-- VIEW 2: EXACT REFERENCE DESIGN RESUME VIEW -->
-  <div id="profileView" style="display: none;">
+  <div id="loader" class="loader">Loading Faculty Profiles...</div>
 
-    <div class="resume-wrapper" id="printArea">
-      
-      <!-- Top Header -->
-      <div class="resume-header">
-        <div class="header-left-title">
-          <div class="name-box">
-            <h1 id="pName">ADELINE PALMERSTON</h1>
-          </div>
-          <div class="desig-box">
-            <h2 id="pDesignation">ENGLISH TEACHER</h2>
-          </div>
-        </div>
+  <!-- SINGLE PAGE FACULTY LIST CONTAINER -->
+  <div class="faculty-list-container" id="facultyContainer"></div>
 
-        <div class="header-right-photo">
-          <div class="curved-bg-shape"></div>
-          <div class="photo-frame-circle">
-            <img id="pImg" src="" alt="Photo" referrerpolicy="no-referrer" onerror="this.src='https://via.placeholder.com/150'">
-          </div>
-        </div>
-      </div>
+</div>
 
-      <!-- Main Body (2 Columns) -->
-      <div class="resume-body">
-        
-        <!-- Left Main Column -->
-        <div class="left-main-col">
-          <div class="content-block">
-            <div class="section-heading-left">ABOUT ME</div>
-            <div class="dashed-line"></div>
-            <p class="about-text" id="pSummary"></p>
-          </div>
-
-          <div class="content-block">
-            <div class="section-heading-left">EXPERIENCE</div>
-            <div class="dashed-line"></div>
-            <div id="pExperience"></div>
-          </div>
-
-          <div class="content-block">
-            <div class="section-heading-left">EDUCATION</div>
-            <div class="dashed-line"></div>
-            <div id="pEducation"></div>
-          </div>
-        </div>
-
-        <!-- Right Sidebar Column -->
-        <div class="right-sidebar-col">
-          <div class="content-block">
-            <div class="section-heading-right">CONTACT</div>
-            <div class="dashed-line-white"></div>
-            <div id="pContact"></div>
-          </div>
-
-          <div class="content-block">
-            <div class="section-heading-right">SKILLS</div>
-            <div class="dashed-line-white"></div>
-            <ul class="sidebar-list" id="pSkills"></ul>
-          </div>
-
-          <div class="content-block">
-            <div class="section-heading-right">REFERENCES</div>
-            <div class="dashed-line-white"></div>
-            <div id="pReference" class="contact-item"></div>
-          </div>
-        </div>
-
-      </div>
-
-      <div class="resume-bottom-bar"></div>
-    </div>
-
-    <!-- Bottom Floating Toolbar for Webview & PDF -->
-    <div class="action-toolbar">
-      <button class="btn-act btn-act-print" onclick="printProfile()">🖨️ Print / Save PDF</button>
-      <button class="btn-act btn-act-close" onclick="showDirectory()">✕ Close</button>
-    </div>
-
-  </div>
-
+<!-- FLOATING PRINT / SAVE PDF BUTTON -->
+<div class="fixed-toolbar">
+  <button class="btn-print-main" onclick="triggerPrint()">🖨️ Print / Save PDF</button>
 </div>
 
 <script>
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyfgUCFlf9n6aVu3JXhYAdek2E7CajoZz-ZhmyTySbd0BchgZLLjHoe_GEhBdg4Uex4/exec";
-  let allTeachersData = [];
 
-  // Google Drive Direct Thumbnail Parser
+  // Google Drive Photo Link Parser
   function getDirectPhotoUrl(url) {
     if (!url) return "https://via.placeholder.com/150";
     
@@ -535,25 +342,21 @@
     return url;
   }
 
-  // Native Android Webview Print Bridge Trigger
-  function printProfile() {
-    if (typeof Android !== "undefined" && Android.print) {
-      Android.print(); // Sketchware Android Native Print Call
-    } else {
-      window.print();  // Standard Browser Fallback
-    }
+  // Print Function Trigger
+  function triggerPrint() {
+    window.print();
   }
 
   window.addEventListener("DOMContentLoaded", () => {
+    // 1. Load instantly from cache if available
     try {
-      const cachedData = localStorage.getItem("cached_faculty_data");
-      if (cachedData) {
-        allTeachersData = JSON.parse(cachedData);
-        renderDirectory(allTeachersData);
-        showMainDirectoryView();
+      const cached = localStorage.getItem("cached_single_page_faculties");
+      if (cached) {
+        renderAllFaculties(JSON.parse(cached));
       }
     } catch(e) {}
 
+    // 2. Fetch fresh data
     fetchData();
   });
 
@@ -562,133 +365,134 @@
       .then(res => res.json())
       .then(res => {
         if (res && res.status === "success" && res.data && res.data.length > 0) {
-          allTeachersData = res.data;
           try {
-            localStorage.setItem("cached_faculty_data", JSON.stringify(res.data));
+            localStorage.setItem("cached_single_page_faculties", JSON.stringify(res.data));
           } catch(e) {}
-          renderDirectory(allTeachersData);
-          showMainDirectoryView();
-        } else if (!allTeachersData.length) {
-          document.getElementById("loader").innerText = "No Data Found!";
+          renderAllFaculties(res.data);
+        } else {
+          document.getElementById("loader").innerText = "No Faculty Data Found!";
         }
       })
       .catch(err => {
         console.error(err);
-        if (!allTeachersData.length) {
-          document.getElementById("loader").innerText = "Connection Error!";
-        }
+        document.getElementById("loader").innerText = "Connection Error. Check internet connection.";
       });
   }
 
-  function showMainDirectoryView() {
+  function renderAllFaculties(teachers) {
     document.getElementById("loader").style.display = "none";
-    document.getElementById("directoryView").style.display = "block";
-  }
-
-  function renderDirectory(teachers) {
-    const grid = document.getElementById("teacherGrid");
-    grid.innerHTML = "";
+    const container = document.getElementById("facultyContainer");
+    container.innerHTML = "";
 
     teachers.forEach((t) => {
       const card = document.createElement("div");
-      card.className = "teacher-card";
-      
-      const photo = getDirectPhotoUrl(t["Photo_url"]);
-      const name = t["Teacher Name"] || "Unknown";
-      const des = t["Designation"] || "TEACHER";
+      card.className = "teacher-resume-card";
+
+      const photoUrl = getDirectPhotoUrl(t["Photo_url"]);
+      const name = t["Teacher Name"] || "Name Not Available";
+      const desig = t["Designation"] || "TEACHER";
+      const summary = t["Profile Summary"] || "No profile summary provided.";
+
+      // Skills items
+      let skillsHtml = "";
+      if (t["Skills"]) {
+        const arr = String(t["Skills"]).split(/,|\n/);
+        arr.forEach(s => {
+          if (s.trim()) skillsHtml += `<li>${s.trim()}</li>`;
+        });
+      }
+
+      // Contact lines
+      let contactHtml = "";
+      if (t["Contact Me"]) {
+        String(t["Contact Me"]).split("\n").forEach(l => {
+          if (l.trim()) contactHtml += `<div class="contact-line">${l.trim()}</div>`;
+        });
+      }
+
+      // Reference lines
+      let refHtml = "";
+      if (t["Reference"]) {
+        String(t["Reference"]).split("\n").forEach(l => {
+          if (l.trim()) refHtml += `<div class="contact-line">${l.trim()}</div>`;
+        });
+      }
 
       card.innerHTML = `
-        <img src="${photo}" alt="${name}" referrerpolicy="no-referrer" onerror="this.src='https://via.placeholder.com/150'">
-        <h3>${name}</h3>
-        <p>${des}</p>
-        <button class="btn-view" onclick="openProfile(${t.id})">View Profile</button>
+        <div class="card-top-header">
+          <div class="header-info">
+            <h2>${name}</h2>
+            <p>${desig}</p>
+          </div>
+          <div class="photo-frame">
+            <img src="${photoUrl}" alt="${name}" referrerpolicy="no-referrer" onerror="this.src='https://via.placeholder.com/150'">
+          </div>
+        </div>
+
+        <div class="card-body-grid">
+          <div class="left-section">
+            <div class="block-group">
+              <div class="sec-title-left">PROFILE SUMMARY</div>
+              <div class="divider-line"></div>
+              <p class="summary-text">${summary}</p>
+            </div>
+
+            <div class="block-group">
+              <div class="sec-title-left">WORK EXPERIENCE</div>
+              <div class="divider-line"></div>
+              <div>${formatMultilineText(t["Work Experience"])}</div>
+            </div>
+
+            <div class="block-group">
+              <div class="sec-title-left">EDUCATION</div>
+              <div class="divider-line"></div>
+              <div>${formatMultilineText(t["Education"])}</div>
+            </div>
+          </div>
+
+          <div class="right-sidebar">
+            <div class="block-group">
+              <div class="sec-title-right">CONTACT</div>
+              <div class="divider-line-white"></div>
+              ${contactHtml}
+            </div>
+
+            <div class="block-group">
+              <div class="sec-title-right">SKILLS</div>
+              <div class="divider-line-white"></div>
+              <ul class="skills-ul">${skillsHtml}</ul>
+            </div>
+
+            <div class="block-group">
+              <div class="sec-title-right">REFERENCE</div>
+              <div class="divider-line-white"></div>
+              ${refHtml}
+            </div>
+          </div>
+        </div>
+
+        <div class="card-bottom-bar"></div>
       `;
-      grid.appendChild(card);
+
+      container.appendChild(card);
     });
   }
 
-  function openProfile(id) {
-    const teacher = allTeachersData.find(t => t.id === id);
-    if (!teacher) return;
-
-    document.getElementById("pName").innerText = teacher["Teacher Name"] || "";
-    document.getElementById("pDesignation").innerText = teacher["Designation"] || "TEACHER";
-    document.getElementById("pImg").src = getDirectPhotoUrl(teacher["Photo_url"]);
-    document.getElementById("pSummary").innerText = teacher["Profile Summary"] || "";
-
-    // Skills List
-    const skillsList = document.getElementById("pSkills");
-    skillsList.innerHTML = "";
-    if (teacher["Skills"]) {
-      const skillsArr = String(teacher["Skills"]).split(/,|\n/);
-      skillsArr.forEach(s => {
-        if (s.trim()) {
-          const li = document.createElement("li");
-          li.innerText = s.trim();
-          skillsList.appendChild(li);
-        }
-      });
-    }
-
-    renderFormattedBlock(teacher["Work Experience"], "pExperience");
-    renderFormattedBlock(teacher["Education"], "pEducation");
-
-    // Contact Info
-    const contactBox = document.getElementById("pContact");
-    contactBox.innerHTML = "";
-    if (teacher["Contact Me"]) {
-      String(teacher["Contact Me"]).split("\n").forEach(l => {
-        if (l.trim()) {
-          const div = document.createElement("div");
-          div.className = "contact-item";
-          div.innerText = l.trim();
-          contactBox.appendChild(div);
-        }
-      });
-    }
-
-    // References
-    const refBox = document.getElementById("pReference");
-    refBox.innerHTML = "";
-    if (teacher["Reference"]) {
-      String(teacher["Reference"]).split("\n").forEach(l => {
-        if (l.trim()) {
-          const div = document.createElement("div");
-          div.innerText = l.trim();
-          refBox.appendChild(div);
-        }
-      });
-    }
-
-    document.getElementById("directoryView").style.display = "none";
-    document.getElementById("profileView").style.display = "block";
-    window.scrollTo(0, 0);
-  }
-
-  function showDirectory() {
-    document.getElementById("profileView").style.display = "none";
-    document.getElementById("directoryView").style.display = "block";
-  }
-
-  function renderFormattedBlock(rawText, targetId) {
-    const container = document.getElementById(targetId);
-    container.innerHTML = "";
-    if (!rawText) return;
-
+  function formatMultilineText(rawText) {
+    if (!rawText) return "";
+    let html = "";
     const blocks = String(rawText).split("\n\n");
-    blocks.forEach(block => {
-      const lines = block.split("\n").filter(l => l.trim() !== "");
+    blocks.forEach(b => {
+      const lines = b.split("\n").filter(l => l.trim() !== "");
       if (lines.length > 0) {
-        const div = document.createElement("div");
-        div.className = "formatted-entry";
-        let html = `<strong>${lines[0].trim()}</strong>`;
+        html += `<div class="entry-item"><strong>${lines[0].trim()}</strong>`;
         for (let i = 1; i < lines.length; i++) {
           html += `<div>• ${lines[i].trim()}</div>`;
         }
-        div.innerHTML = html;
-        container.appendChild(div);
+        html += `</div>`;
       }
     });
+    return html;
   }
 </script>
 
